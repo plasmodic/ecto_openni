@@ -1,23 +1,29 @@
 #include <ecto/ecto.hpp>
-#include <XnCppWrapper.h>
-#include <boost/shared_ptr.hpp>
+
 #include <vector>
-#include <boost/integer.hpp>
 #include <sstream>
 
-using ecto::tendrils;
-using ecto::spore;
+#include <boost/shared_ptr.hpp>
+#include <boost/integer.hpp>
+
+//openni includes
+#include <XnCppWrapper.h>
+
 #define NI_STATUS_ERROR(x) \
   do{std::stringstream s; s << x << std::string(xnGetStatusString(status)) << std::endl << __LINE__ << ":" << __FILE__ << std::endl; throw std::runtime_error(s.str());}while(false)
 
+using ecto::tendrils;
+using ecto::spore;
+
 namespace ecto_openni
 {
+  /**
+   * OpenNI struct for ease of cell implementation.
+   */
   struct NiStuffs
   {
     // OpenNI context
     xn::Context context;
-    bool m_isOpened;
-
     // Data generators with its metadata
     xn::DepthGenerator depthGenerator;
     xn::DepthMetaData depthMetaData;
@@ -45,11 +51,9 @@ namespace ecto_openni
       XnStatus status = XN_STATUS_OK;
 
       // Initialize image output modes (VGA_30HZ by default).
-      depthOutputMode.nXRes = imageOutputMode.nXRes = XN_VGA_X_RES;
-      depthOutputMode.nYRes = imageOutputMode.nYRes = XN_VGA_Y_RES;
-      depthOutputMode.nFPS = imageOutputMode.nFPS = 30;
-
-      m_isOpened = false;
+      depthOutputMode.nXRes = imageOutputMode.nXRes = XN_VGA_X_RES; //TODO FIXME turn this into a parameter.
+      depthOutputMode.nYRes = imageOutputMode.nYRes = XN_VGA_Y_RES; //TODO FIXME turn this into a parameter.
+      depthOutputMode.nFPS = imageOutputMode.nFPS = 30; //TODO FIXME turn this into a parameter.
 
       status = context.Init();
       // Initialize and configure the context.
@@ -94,8 +98,6 @@ namespace ecto_openni
       status = context.StartGeneratingAll();
       if (status != XN_STATUS_OK)
         NI_STATUS_ERROR("Failed to start generating all");
-
-      m_isOpened = true;
     }
 
     ~NiStuffs()
@@ -142,18 +144,7 @@ namespace ecto_openni
       depth.resize(depth_width * depth_height * sizeof(*pDepthMap));
       std::memcpy((char*) (depth.data()), pDepthMap, depth.size());
     }
-//
-//      void
-//      fillImageGrayScale(std::vector<uint8_t>& image, int& image_width, int& image_height, int& nchannels)
-//      {
-//        image_width = imageMetaData.XRes();
-//        image_height = imageMetaData.YRes();
-//        nchannels = 1;
-//        const Xn* pRgbImage = imageMetaData.Grayscale8Data();
-//
-//        image.resize(image_height * image_width * nchannels);
-//        memcpy(image.data(), pRgbImage, image.size());
-//      }
+
     void
     fillImageRGB(std::vector<uint8_t>& image, int& image_width, int& image_height, int& nchannels)
     {
@@ -165,6 +156,7 @@ namespace ecto_openni
       image.resize(image_height * image_width * nchannels);
       memcpy(image.data(), pRgbImage, image.size());
     }
+
     void
     grabAll(std::vector<uint8_t>& image, std::vector<uint16_t>& depth, int& image_width, int& image_height,
         int& nchannels, int& depth_width, int& depth_height)
@@ -177,10 +169,9 @@ namespace ecto_openni
       fillDepth(depth, depth_width, depth_height);
       fillImageRGB(image, image_width, image_height, nchannels);
     }
+  };
 
-  }
-  ;
-  struct Grabber
+  struct Capture
   {
     typedef std::vector<uint8_t> RgbData;
     typedef std::vector<uint16_t> DepthData;
@@ -207,7 +198,6 @@ namespace ecto_openni
       o.declare<int>("image_channels", "Number of image channels.");
       o.declare<DepthDataConstPtr>("depth_buffer");
       o.declare<RgbDataConstPtr>("image_buffer");
-
     }
 
     void
@@ -221,7 +211,7 @@ namespace ecto_openni
       image_buffer = o["image_buffer"];
       depth_buffer = o["depth_buffer"];
       nistuffs.reset(new NiStuffs(0));
-      nistuffs->set_depth_registration_on();
+      nistuffs->set_depth_registration_on(); //TODO FIXME turn this into a parameter.
     }
 
     int
@@ -243,4 +233,4 @@ namespace ecto_openni
   };
 }
 
-ECTO_CELL(ecto_openni, ecto_openni::Grabber, "Grabber", "Raw data grabber off of an OpenNI device.");
+ECTO_CELL(ecto_openni, ecto_openni::Capture, "Capture", "Raw data capture off of an OpenNI device.");

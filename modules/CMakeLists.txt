@@ -2,10 +2,10 @@ include_directories(${OPENNI_INCLUDE_DIR})
 
 ectomodule(ecto_openni
   module.cpp
-  Grabber.cpp
+  Capture.cpp
   )
 
-set_source_files_properties(Grabber.cpp
+set_source_files_properties(Capture.cpp
   PROPERTIES
   COMPILE_FLAGS "-Wno-deprecated -Wno-strict-aliasing"
   )
