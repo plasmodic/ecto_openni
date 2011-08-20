@@ -16,5 +16,5 @@ plasm.connect(capture[:] >> verter[:],
               )
 
 if __name__ == '__main__':
-    sched = ecto.schedulers.Singlethreaded(plasm)
+    sched = ecto.schedulers.Threadpool(plasm)
     sched.execute()
