@@ -8,7 +8,7 @@
 
 //openni includes
 #include <XnCppWrapper.h>
-
+#include "enums.hpp"
 #define NI_STATUS_ERROR(x) \
   do{std::stringstream s; s << x << std::string(xnGetStatusString(status)) << std::endl << __LINE__ << ":" << __FILE__ << std::endl; throw std::runtime_error(s.str());}while(false)
 
@@ -17,6 +17,35 @@ using ecto::spore;
 
 namespace ecto_openni
 {
+//#define XN_QQVGA_X_RES  160
+//#define XN_QQVGA_Y_RES  120
+//
+//#define XN_CGA_X_RES  320
+//#define XN_CGA_Y_RES  200
+//
+//#define XN_QVGA_X_RES 320
+//#define XN_QVGA_Y_RES 240
+//
+//#define XN_VGA_X_RES  640
+//#define XN_VGA_Y_RES  480
+//
+//#define XN_SVGA_X_RES 800
+//#define XN_SVGA_Y_RES 600
+//
+//#define XN_XGA_X_RES  1024
+//#define XN_XGA_Y_RES  768
+//
+//#define XN_720P_X_RES 1280
+//#define XN_720P_Y_RES 720
+//
+//#define XN_SXGA_X_RES 1280
+//#define XN_SXGA_Y_RES 1024
+//
+//#define XN_UXGA_X_RES 1600
+//#define XN_UXGA_Y_RES 1200
+//
+//#define XN_1080P_X_RES  1920
+//#define XN_1080P_Y_RES  1080
   /**
    * OpenNI struct for ease of cell implementation.
    */
@@ -45,15 +74,40 @@ namespace ecto_openni
     // The value for pixels without a valid disparity measurement
     XnUInt64 noSampleValue;
 
+    template<typename OutputMode>
+    void
+    setMode(OutputMode& mode, ResolutionMode m)
+    {
+      switch (m)
+      {
+        case QVGA_RES:
+          mode.nXRes = XN_QVGA_X_RES;
+          mode.nYRes = XN_QVGA_Y_RES;
+          break;
+        case VGA_RES:
+          mode.nXRes = XN_VGA_X_RES;
+          mode.nYRes = XN_VGA_Y_RES;
+          break;
+        case XGA_RES:
+          mode.nXRes = XN_XGA_X_RES;
+          mode.nYRes = XN_XGA_Y_RES;
+          break;
+        case SXGA_RES:
+          mode.nXRes = XN_SXGA_X_RES;
+          mode.nYRes = XN_SXGA_Y_RES;
+          mode.nFPS = 15;
+          break;
+      }
+    }
     //http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
-    NiStuffs(int index)
+    NiStuffs(int index, ResolutionMode rgb_res, ResolutionMode depth_res)
     {
       XnStatus status = XN_STATUS_OK;
 
-      // Initialize image output modes (VGA_30HZ by default).
-      depthOutputMode.nXRes = imageOutputMode.nXRes = XN_VGA_X_RES; //TODO FIXME turn this into a parameter.
-      depthOutputMode.nYRes = imageOutputMode.nYRes = XN_VGA_Y_RES; //TODO FIXME turn this into a parameter.
       depthOutputMode.nFPS = imageOutputMode.nFPS = 30; //TODO FIXME turn this into a parameter.
+
+      setMode(depthOutputMode, depth_res);
+      setMode(imageOutputMode, rgb_res);
 
       status = context.Init();
       // Initialize and configure the context.
@@ -88,11 +142,11 @@ namespace ecto_openni
       // Set map output mode.
       status = depthGenerator.SetMapOutputMode(depthOutputMode);
       if (status != XN_STATUS_OK)
-        NI_STATUS_ERROR("Failed to depth SetMapOutputMode: ");
+        NI_STATUS_ERROR("Failed to set SetMapOutputMode:\n ");
       // xn::DepthGenerator supports VGA only! (Jan 2011)
       status = imageGenerator.SetMapOutputMode(imageOutputMode);
       if (status != XN_STATUS_OK)
-        NI_STATUS_ERROR("Failed to image SetMapOutputMode: ");
+        NI_STATUS_ERROR("Failed to set SetMapOutputMode:\n ");
 
       //  Start generating data.
       status = context.StartGeneratingAll();
@@ -142,34 +196,33 @@ namespace ecto_openni
       depth_height = depthMetaData.YRes();
       const XnDepthPixel* pDepthMap = depthMetaData.Data();
       depth.resize(depth_width * depth_height);
-      std::memcpy((char*) (depth.data()), pDepthMap,sizeof(uint16_t)*depth.size());
-    }
+      std::memcpy((char*) (depth.data()), pDepthMap,sizeof(uint16_t)*depth.size());}
 
-    void
-    fillImageRGB(std::vector<uint8_t>& image, int& image_width, int& image_height, int& nchannels)
-    {
-      image_width = imageMetaData.XRes();
-      image_height = imageMetaData.YRes();
-      nchannels = 3;
-      const XnRGB24Pixel* pRgbImage = imageMetaData.RGB24Data();
+      void
+      fillImageRGB(std::vector<uint8_t>& image, int& image_width, int& image_height, int& nchannels)
+      {
+        image_width = imageMetaData.XRes();
+        image_height = imageMetaData.YRes();
+        nchannels = 3;
+        const XnRGB24Pixel* pRgbImage = imageMetaData.RGB24Data();
 
-      image.resize(image_height * image_width * nchannels);
-      memcpy(image.data(), pRgbImage, image.size());
-    }
+        image.resize(image_height * image_width * nchannels);
+        memcpy(image.data(), pRgbImage, image.size());
+      }
 
-    void
-    grabAll(std::vector<uint8_t>& image, std::vector<uint16_t>& depth, int& image_width, int& image_height,
-        int& nchannels, int& depth_width, int& depth_height)
-    {
-      XnStatus status = context.WaitAndUpdateAll();
-      if (status != XN_STATUS_OK)
-      throw std::runtime_error("Could not update all openni contexts.");
-      depthGenerator.GetMetaData(depthMetaData);
-      imageGenerator.GetMetaData(imageMetaData);
-      fillDepth(depth, depth_width, depth_height);
-      fillImageRGB(image, image_width, image_height, nchannels);
-    }
-  };
+      void
+      grabAll(std::vector<uint8_t>& image, std::vector<uint16_t>& depth, int& image_width, int& image_height,
+          int& nchannels, int& depth_width, int& depth_height)
+      {
+        XnStatus status = context.WaitAndUpdateAll();
+        if (status != XN_STATUS_OK)
+        throw std::runtime_error("Could not update all openni contexts.");
+        depthGenerator.GetMetaData(depthMetaData);
+        imageGenerator.GetMetaData(imageMetaData);
+        fillDepth(depth, depth_width, depth_height);
+        fillImageRGB(image, image_width, image_height, nchannels);
+      }
+    };
 
   struct Capture
   {
@@ -186,6 +239,10 @@ namespace ecto_openni
     declare_params(tendrils& p)
     {
 
+      p.declare<bool>("registration", "Turn registration on.", true);
+      p.declare<std::string>("device_uid", "Unique identifier for device to use. fixme", "NA");
+      p.declare<ResolutionMode>("rgb_resolution", "Rgb mode.", VGA_RES);
+      p.declare<ResolutionMode>("depth_resolution", "Depth mode.", VGA_RES);
     }
 
     static void
@@ -210,17 +267,24 @@ namespace ecto_openni
       image_channels = o["image_channels"];
       image_buffer = o["image_buffer"];
       depth_buffer = o["depth_buffer"];
+      rgb_resolution = p["rgb_resolution"];
+      depth_resolution = p["depth_resolution"];
+      registration_on = p["registration"];
     }
 
     int
     process(const tendrils&, const tendrils&)
     {
-      if(!nistuffs)
+      if (!nistuffs)
       {
         std::cout << "Connecting to device." << std::endl;
-        nistuffs.reset(new NiStuffs(0));
-        nistuffs->set_depth_registration_on(); //TODO FIXME turn this into a parameter.
-        std::cout << "Connected to device." << std::endl;
+        nistuffs.reset(new NiStuffs(0, *rgb_resolution, *depth_resolution));
+        if(*registration_on)
+        {
+          std::cout << "Turning on depth registration:" << std::endl;
+          nistuffs->set_depth_registration_on();
+        }
+          std::cout << "Connected to device." << std::endl;
       }
       DepthDataPtr db(new DepthData());
       RgbDataPtr ib(new RgbData());
@@ -234,6 +298,8 @@ namespace ecto_openni
     ecto::spore<int> depth_width, depth_height, image_width, image_height, image_channels;
     ecto::spore<DepthDataConstPtr> depth_buffer;
     ecto::spore<RgbDataConstPtr> image_buffer;
+    ecto::spore<ResolutionMode> rgb_resolution, depth_resolution;
+    ecto::spore<bool> registration_on;
 
   };
 }
