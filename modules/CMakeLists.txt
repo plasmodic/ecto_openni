@@ -7,7 +7,7 @@ ectomodule(ecto_openni
 
 set_source_files_properties(Capture.cpp
   PROPERTIES
-  COMPILE_FLAGS "-Wno-deprecated -Wno-strict-aliasing"
+  COMPILE_FLAGS "-Wno-deprecated -Wno-strict-aliasing -Wno-unknown-pragmas"
   )
   
 
