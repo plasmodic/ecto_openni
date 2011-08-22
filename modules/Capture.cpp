@@ -141,8 +141,8 @@ namespace ecto_openni
       depth_width = depthMetaData.XRes();
       depth_height = depthMetaData.YRes();
       const XnDepthPixel* pDepthMap = depthMetaData.Data();
-      depth.resize(depth_width * depth_height * sizeof(*pDepthMap));
-      std::memcpy((char*) (depth.data()), pDepthMap, depth.size());
+      depth.resize(depth_width * depth_height);
+      std::memcpy((char*) (depth.data()), pDepthMap,sizeof(uint16_t)*depth.size());
     }
 
     void
@@ -210,13 +210,18 @@ namespace ecto_openni
       image_channels = o["image_channels"];
       image_buffer = o["image_buffer"];
       depth_buffer = o["depth_buffer"];
-      nistuffs.reset(new NiStuffs(0));
-      nistuffs->set_depth_registration_on(); //TODO FIXME turn this into a parameter.
     }
 
     int
     process(const tendrils&, const tendrils&)
     {
+      if(!nistuffs)
+      {
+        std::cout << "Connecting to device." << std::endl;
+        nistuffs.reset(new NiStuffs(0));
+        nistuffs->set_depth_registration_on(); //TODO FIXME turn this into a parameter.
+        std::cout << "Connected to device." << std::endl;
+      }
       DepthDataPtr db(new DepthData());
       RgbDataPtr ib(new RgbData());
       *image_buffer = ib;
