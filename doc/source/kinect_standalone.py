@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import ecto
 
-from ecto_openni import Capture, ResolutionMode, Device
 from ecto_opencv import imgproc, calib, highgui
 
 def kinect_highres(device_n):
+    from ecto_openni import Capture, ResolutionMode, Device
     return Capture('ni device', rgb_resolution=ResolutionMode.SXGA_RES,
                    depth_resolution=ResolutionMode.VGA_RES,
                    rgb_fps=15, depth_fps=30,
@@ -15,6 +15,7 @@ def kinect_highres(device_n):
                    )
 
 def kinect_vga(device_n):
+    from ecto_openni import Capture, ResolutionMode, Device
     return Capture('ni device', rgb_resolution=ResolutionMode.VGA_RES,
                    depth_resolution=ResolutionMode.VGA_RES,
                    rgb_fps=30, depth_fps=30,
@@ -24,6 +25,7 @@ def kinect_vga(device_n):
                    device=Device.KINECT
                    )
 def xtion_highres(device_n):
+    from ecto_openni import Capture, ResolutionMode, Device
     return Capture('ni device', rgb_resolution=ResolutionMode.SXGA_RES,
                    depth_resolution=ResolutionMode.VGA_RES,
                    rgb_fps=30, depth_fps=30,
@@ -34,6 +36,7 @@ def xtion_highres(device_n):
                    )
 
 def xtion_vga(device_n):
+    from ecto_openni import Capture, ResolutionMode, Device
     return Capture('ni device', rgb_resolution=ResolutionMode.VGA_RES,
                    depth_resolution=ResolutionMode.VGA_RES,
                    rgb_fps=30, depth_fps=30,
