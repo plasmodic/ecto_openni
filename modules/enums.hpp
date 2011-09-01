@@ -35,11 +35,18 @@ namespace ecto_openni
 {
   enum ResolutionMode
   {
-    QVGA_RES, VGA_RES, XGA_RES, SXGA_RES
+    QQVGA_RES, CGA_RES, QVGA_RES, VGA_RES, XGA_RES, HD720P_RES, SXGA_RES, UXGA_RES, HD1080P_RES
   };
 
   enum FpsMode
   {
-    FPS_15,FPS_30,FPS_60,
+    FPS_15, FPS_30, FPS_60,
+  };
+
+  enum Device
+  {
+    KINECT,
+    PRIMESENSE,
+    ASUS_XTION_PRO_LIVE,
   };
 }
