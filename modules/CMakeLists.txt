@@ -13,4 +13,5 @@ set_source_files_properties(${SRCS}
   
 
 link_ecto(ecto_openni ${OPENNI_LIBRARY})
+install_ecto_module(ecto_openni)
 
