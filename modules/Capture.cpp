@@ -448,7 +448,7 @@ namespace ecto_openni
     {
 
       p.declare<bool>("registration", "Turn registration on.", true);
-      p.declare<bool>("synchronize", "Turn sync on.", true);
+      p.declare<bool>("synchronize", "Turn sync on.", false);
       p.declare<std::string>("device_uid", "Unique identifier for device to use. fixme", "NA");
       p.declare<ResolutionMode>("rgb_resolution", "Rgb mode.", VGA_RES);
       p.declare<ResolutionMode>("depth_resolution", "Depth mode.", VGA_RES);
