@@ -143,7 +143,7 @@ namespace ecto_openni
         float distance = std::sqrt(
             std::pow(desired_mode.nFPS - m.nFPS, 2) + std::pow(desired_mode.nXRes - m.nXRes, 2)
             + std::pow(desired_mode.nYRes - m.nYRes, 2));
-        std::cout << "Mode " << i << " : " << m << " distance=" << distance << std::endl;
+        //std::cout << "Mode " << i << " : " << m << " distance=" << distance << std::endl;
         if (distance < best_distance)
         {
           best_distance = distance;
@@ -267,9 +267,9 @@ namespace ecto_openni
       if (status != XN_STATUS_OK)
         NI_STATUS_ERROR("Failed to create image generator: ");
 
-      std::cout << "Depth modes:" << std::endl;
+      //std::cout << "Depth modes:" << std::endl;
       enumerate_modes(depthGenerator, depthOutputMode, true);
-      std::cout << "image modes:" << std::endl;
+      //std::cout << "image modes:" << std::endl;
       enumerate_modes(imageGenerator, imageOutputMode, true);
 
       // Set map output mode.
