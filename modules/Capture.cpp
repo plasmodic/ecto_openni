@@ -306,7 +306,7 @@ namespace ecto_openni
     ~NiStuffs()
     {
       context.StopGeneratingAll();
-      context.Shutdown();
+      context.Release();
     }
 
     void
