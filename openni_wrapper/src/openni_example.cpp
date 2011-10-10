@@ -80,8 +80,10 @@ private:
   void imageCallback (boost::shared_ptr<Image> image, void* cookie);
   void irCallback (boost::shared_ptr<IRImage> image, void* cookie);
   void depthCallback (boost::shared_ptr<DepthImage> depth, void* cookie);
-  void syncCallback (const boost::shared_ptr<openni_wrapper::Image> &image, 
-                                const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image);
+  void syncRGBCallback (const boost::shared_ptr<openni_wrapper::Image> &image, 
+                        const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image);
+  void syncIRCallback (const boost::shared_ptr<openni_wrapper::IRImage> &image, 
+                       const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image);
   void writeImages () const;
   map<string, ImageContext*> rgb_images_;
   map<string, ImageContext*> gray_images_;
@@ -91,6 +93,7 @@ private:
   bool running_;
   unsigned selected_device_;
   Synchronizer<boost::shared_ptr<openni_wrapper::Image>, boost::shared_ptr<openni_wrapper::DepthImage> > rgbd_sync_;
+  Synchronizer<boost::shared_ptr<openni_wrapper::IRImage>, boost::shared_ptr<openni_wrapper::DepthImage> > ird_sync_;
 
   double image_timestamp;
   double depth_timestamp;
@@ -241,11 +244,18 @@ void MyOpenNIExample::writeImages () const
   //    imageIt->second->lock.unlock ();
 }
 
-void MyOpenNIExample::syncCallback (const boost::shared_ptr<openni_wrapper::Image> &image, 
+void MyOpenNIExample::syncRGBCallback (const boost::shared_ptr<openni_wrapper::Image> &image, 
                                     const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image)
   {
     // do something with image pair
-    cout << "got a pair: " << (int)(0.001*((int)image->getTimeStamp() - (int)depth_image->getTimeStamp())) << " ms diff" << endl;
+    cout << "got an image/depth pair: " << (int)(0.001*((int)image->getTimeStamp() - (int)depth_image->getTimeStamp())) << " ms diff" << endl;
+  }
+
+void MyOpenNIExample::syncIRCallback (const boost::shared_ptr<openni_wrapper::IRImage> &image, 
+                                    const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image)
+  {
+    // do something with image pair
+    cout << "got an ir/depth pair: " << (int)(0.001*((int)image->getTimeStamp() - (int)depth_image->getTimeStamp())) << " ms diff" << endl;
   }
 
 
@@ -270,10 +280,6 @@ void MyOpenNIExample::imageCallback (boost::shared_ptr<Image> image, void* cooki
                                               (rgb_image_context->image.rows >> 2) * rgb_image_context->image.step);
   image->fillRGB (rgb_image_context->image.cols >> 1, rgb_image_context->image.rows >> 1, rgb_buffer, rgb_image_context->image.step);
   
-
-  // add image to synchronizer
-  rgbd_sync_.add0(image, image->getTimeStamp());
-
 
 /*
   unsigned char* rgb_buffer = (unsigned char*)(rgb_image_context->image.data + (rgb_image_context->image.cols >> 3 ) * 3 * rgb_image_context->image.elemSize () +
@@ -305,6 +311,9 @@ void MyOpenNIExample::imageCallback (boost::shared_ptr<Image> image, void* cooki
   //  image->fillGrayscale (gray_image_context->image.cols >> 1, gray_image_context->image.rows >> 1, gray_buffer, gray_image_context->image.step);
   image->fillGrayscale (gray_image_context->image.cols, gray_image_context->image.rows, gray_image_context->image.data, gray_image_context->image.step);
   gray_image_context->is_new = true;
+
+  // add image to synchronizers
+  rgbd_sync_.add0(image, image->getTimeStamp());
 }
 
 void MyOpenNIExample::irCallback (boost::shared_ptr<IRImage> image, void* cookie)
@@ -327,10 +336,10 @@ void MyOpenNIExample::irCallback (boost::shared_ptr<IRImage> image, void* cookie
   //  image->fillGrayscale (ir_image_context->image.cols >> 1, ir_image_context->image.rows >> 1, ir_buffer, ir_image_context->image.step);
   image->fillRaw (ir_image_context->image.cols, ir_image_context->image.rows, (unsigned short int *)ir_image_context->image.data, ir_image_context->image.step);
 
-  // add image to synchronizer
-  //  rgbd_sync_.add0(image, image->getTimeStamp());
-
   ir_image_context->is_new = true;
+
+  // add image to synchronizer
+  ird_sync_.add0(image, image->getTimeStamp());
 }
 
 void MyOpenNIExample::depthCallback (boost::shared_ptr<DepthImage> depth, void* cookie)
@@ -350,21 +359,23 @@ void MyOpenNIExample::depthCallback (boost::shared_ptr<DepthImage> depth, void* 
   //  depth->fillDepthImage (depth_image_context->image.cols >> 1, depth_image_context->image.rows >> 1, buffer, depth_image_context->image.step);
   depth->fillDepthImage (depth_image_context->image.cols, depth_image_context->image.rows, (float*)depth_image_context->image.data, depth_image_context->image.step);
 
-  // add depth to synchronizer
-  rgbd_sync_.add1(depth, depth->getTimeStamp());
-
   depth_image_context->is_new = true;
+
+  // add depth to synchronizers
+  rgbd_sync_.add1(depth, depth->getTimeStamp());
+  ird_sync_.add1(depth, depth->getTimeStamp());
 }
 
 int MyOpenNIExample::run ()
 {
   // create instance to sync image + depth
-  rgbd_sync_.addCallback(boost::bind(&MyOpenNIExample::syncCallback, this, _1, _2));
+  rgbd_sync_.addCallback(boost::bind(&MyOpenNIExample::syncRGBCallback, this, _1, _2));
+  ird_sync_.addCallback(boost::bind(&MyOpenNIExample::syncIRCallback, this, _1, _2));
 
   running_ = true;
   devices_[selected_device_]->startDepthStream ();
-  devices_[selected_device_]->startImageStream ();
-  //  devices_[selected_device_]->startIRStream ();
+  //  devices_[selected_device_]->startImageStream ();
+  devices_[selected_device_]->startIRStream ();
 
   try
   {
