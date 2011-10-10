@@ -16,6 +16,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 ecto_python_env_gen(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 add_subdirectory(modules)
+add_subdirectory(openni_wrapper)
 
 option(BUILD_TEST "Build tests" ON)
 if(BUILD_TEST)
