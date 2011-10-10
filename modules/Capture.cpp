@@ -306,7 +306,11 @@ namespace ecto_openni
     ~NiStuffs()
     {
       context.StopGeneratingAll();
+#if XN_VERSION >= (1 * 100000000 + 3 * 1000000 + 2 * 10000)
       context.Release();
+#else
+      context.Shutdown();
+#endif
     }
 
     void
