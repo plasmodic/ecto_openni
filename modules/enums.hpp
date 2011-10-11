@@ -49,4 +49,9 @@ namespace ecto_openni
     PRIMESENSE,
     ASUS_XTION_PRO_LIVE,
   };
+
+  enum StreamMode
+  {
+    IR = 1, DEPTH = 2, RGB = 4, GRAY = 8, DEPTH_RGB = DEPTH | RGB, DEPTH_GRAY = DEPTH | GRAY, DEPTH_IR = DEPTH | IR,
+  };
 }

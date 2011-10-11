@@ -1,9 +1,10 @@
 include_directories(${OPENNI_INCLUDE_DIR})
-
 set (SRCS 
   module.cpp
   Capture.cpp
+  openni_driver.cpp
   )
+
 ectomodule(ecto_openni ${SRCS})
 
 set_source_files_properties(${SRCS}
@@ -12,6 +13,6 @@ set_source_files_properties(${SRCS}
   )
   
 
-link_ecto(ecto_openni ${OPENNI_LIBRARY})
+link_ecto(ecto_openni openni_wrapper ${OpenCV_LIBS} ${OPENNI_LIBRARY})
 install_ecto_module(ecto_openni)
 

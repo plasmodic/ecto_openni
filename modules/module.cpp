@@ -23,4 +23,13 @@ ECTO_DEFINE_MODULE(ecto_openni){
     .value("ASUS_XTION_PRO_LIVE",ASUS_XTION_PRO_LIVE)
     .export_values()
     ;
+
+  boost::python::enum_<StreamMode>("StreamMode")
+    .value("DEPTH",DEPTH)
+    .value("RGB",RGB)
+    .value("IR",IR)
+    .value("DEPTH_RGB",DEPTH_RGB)
+    .value("DEPTH_IR",DEPTH_IR)
+    .export_values()
+    ;
 }
