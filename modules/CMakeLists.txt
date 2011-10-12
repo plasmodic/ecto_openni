@@ -2,6 +2,7 @@ include_directories(${OPENNI_INCLUDE_DIR})
 set (SRCS 
   module.cpp
   Capture.cpp
+  IRGamma.cpp
   openni_driver.cpp
   )
 
