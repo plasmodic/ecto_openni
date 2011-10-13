@@ -204,7 +204,7 @@ OpenNIStuff::dataReady(ecto_openni::StreamMode mode, unsigned long stamp)
 void
 OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat& depth, cv::Mat& image, cv::Mat& ir)
 {
-  const double time_diff_max = 16;
+  const double time_diff_max = 20;
   std::string connection = devices_[selected_device_]->getConnectionString();
   if (stream_mode_ != mode || registration_mode_ != registration)
   {
@@ -217,8 +217,11 @@ OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat&
   {
     cond.wait(lock);
   }
-  bool check_sync = true;
+  bool check_sync = false;
   double depth_stamp = timestamps[int(log(double(ecto_openni::DEPTH)) / log(2.0))];
+  double rgb_stamp = timestamps[int(log(double(ecto_openni::RGB)) / log(2.0))];
+  double ir_stamp = timestamps[int(log(double(ecto_openni::IR)) / log(2.0))];
+
   if (mode & ecto_openni::DEPTH)
   {
     Mat depth_ = depth_images_[connection];
@@ -230,11 +233,11 @@ OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat&
   }
   if (mode & ecto_openni::IR)
   {
+    std::cout << "IR vs Depth:" << ir_stamp - depth_stamp << std::endl;
     Mat ir_ = ir_images_[connection];
     ir_.copyTo(ir);
     if (check_sync)
     {
-      double ir_stamp = timestamps[int(log(double(ecto_openni::IR)) / log(2.0))];
       if (depth_stamp - ir_stamp > time_diff_max) //ir_stamp too old...
       {
         data_ready = data_ready ^ ecto_openni::IR; //wipe out IR
@@ -245,16 +248,15 @@ OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat&
         data_ready = data_ready ^ ecto_openni::DEPTH; //wipe out depth data
         goto wait_for_data;
       }
-//      std::cout << "IR vs Depth:" << ir_stamp - depth_stamp << std::endl;
     }
   }
   if (mode & ecto_openni::RGB)
   {
+    std::cout << "RGB vs Depth:" << rgb_stamp - depth_stamp << std::endl;
     Mat image_ = rgb_images_[connection];
     image_.copyTo(image);
     if (check_sync)
     {
-      double rgb_stamp = timestamps[int(log(double(ecto_openni::RGB)) / log(2.0))];
       if (depth_stamp - rgb_stamp > time_diff_max) //rgb too old...
       {
         data_ready = data_ready ^ ecto_openni::RGB; //wipe out RGB
@@ -265,7 +267,6 @@ OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat&
         data_ready = data_ready ^ ecto_openni::DEPTH; //wipe out DEPTH
         goto wait_for_data;
       }
-//      std::cout << "RGB vs Depth:" << rgb_stamp - depth_stamp << std::endl;
     }
   }
   data_ready = 0;
