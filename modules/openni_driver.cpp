@@ -233,7 +233,7 @@ OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat&
   }
   if (mode & ecto_openni::IR)
   {
-    std::cout << "IR vs Depth:" << ir_stamp - depth_stamp << std::endl;
+//    std::cout << "IR vs Depth:" << ir_stamp - depth_stamp << std::endl;
     Mat ir_ = ir_images_[connection];
     ir_.copyTo(ir);
     if (check_sync)
@@ -252,7 +252,7 @@ OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat&
   }
   if (mode & ecto_openni::RGB)
   {
-    std::cout << "RGB vs Depth:" << rgb_stamp - depth_stamp << std::endl;
+//    std::cout << "RGB vs Depth:" << rgb_stamp - depth_stamp << std::endl;
     Mat image_ = rgb_images_[connection];
     image_.copyTo(image);
     if (check_sync)
