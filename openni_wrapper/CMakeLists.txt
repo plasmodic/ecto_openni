@@ -30,7 +30,6 @@ set_source_files_properties(${SRCS}
 
 ADD_LIBRARY(openni_wrapper SHARED ${SRCS})
 
-ADD_EXECUTABLE(wrapper_test src/openni_example.cpp)
-TARGET_LINK_LIBRARIES(wrapper_test openni_wrapper boost_thread ${OpenCV_LIBS} OpenNI)
+TARGET_LINK_LIBRARIES(openni_wrapper openni_wrapper boost_thread ${OpenCV_LIBS} OpenNI)
 
 
