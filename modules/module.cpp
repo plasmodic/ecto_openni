@@ -2,6 +2,10 @@
 
 #include "enums.hpp"
 using namespace ecto_openni;
+namespace ecto_openni
+{
+void wrap_openni_enumerate();
+}
 
 ECTO_DEFINE_MODULE(ecto_openni){
   boost::python::enum_<ResolutionMode>("ResolutionMode")
@@ -32,4 +36,6 @@ ECTO_DEFINE_MODULE(ecto_openni){
     .value("DEPTH_IR",DEPTH_IR)
     .export_values()
     ;
+
+  wrap_openni_enumerate();
 }
