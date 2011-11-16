@@ -126,8 +126,8 @@ namespace openni_wrapper
     for (unsigned i = 0; i < n; i++)
       {
         XnMapOutputMode m = modes[i];
-        int distance = abs(desired_mode.nFPS - m.nFPS) + abs(desired_mode.nXRes - m.nXRes) +
-	  abs(desired_mode.nYRes - m.nYRes);
+        int distance = abs(int(desired_mode.nFPS - m.nFPS)) + abs((int)(desired_mode.nXRes - m.nXRes)) +
+	  abs((int)(desired_mode.nYRes - m.nYRes));
 	//        std::cout << "Mode " << i << " : " << m << " distance=" << distance << std::endl;
         if (distance < best_distance)
 	  {

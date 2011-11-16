@@ -43,6 +43,7 @@
 #include <cmath>
 #include <cstring>
 #include <iostream>
+#include <stdint.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/integer.hpp>
