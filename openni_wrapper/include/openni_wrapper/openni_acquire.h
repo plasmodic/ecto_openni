@@ -51,6 +51,7 @@
 //openni includes
 #include <openni_wrapper/enums.hpp>
 
+
 namespace
 {
   std::ostream&
