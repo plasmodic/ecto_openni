@@ -19,8 +19,6 @@ endif()
 
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 
-#LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-
 set (SRCS 
   src/openni_device.cpp
   src/openni_device_xtion.cpp  
@@ -41,6 +39,8 @@ set_source_files_properties(${SRCS}
   PROPERTIES
   COMPILE_FLAGS "-Wno-deprecated -Wno-strict-aliasing -Wno-unknown-pragmas -Wno-error"
   )
+
+link_directories(${CMAKEDEMO_BINARY_DIR}/w01-cpp)
 
 ADD_LIBRARY(openni_wrapper SHARED ${SRCS})
 TARGET_LINK_LIBRARIES(openni_wrapper openni_wrapper boost_thread ${OpenCV_LIBS} OpenNI)

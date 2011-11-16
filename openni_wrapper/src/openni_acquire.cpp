@@ -266,6 +266,13 @@ namespace openni_wrapper
     if (status != XN_STATUS_OK)
       NI_STATUS_ERROR("Failed to set SetMapOutputMode:\n ");
 
+    if (strcmp(driver.getProductName (index), "PrimeSense Device")==0)
+      device_type = PRIMESENSE;
+    if (!strcmp(driver.getProductName (index), "Asus"))
+      device_type = ASUS_XTION_PRO_LIVE;
+    if (!strcmp(driver.getProductName (index), "Kinect"))
+      device_type = KINECT;
+
     switch (device_type)
       {
       case KINECT:

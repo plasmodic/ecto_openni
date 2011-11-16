@@ -11,6 +11,8 @@ find_package(ecto REQUIRED)
 
 #all the ecto modules will be put here.
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+# any executables will be put here
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 #generates a python environment script
 ecto_python_env_gen(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
