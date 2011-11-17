@@ -199,8 +199,9 @@ namespace openni_wrapper
   }
 
   //http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
-  NiStuffs::NiStuffs(int index, ResolutionMode rgb_res, ResolutionMode depth_res, FpsMode rgb_fps, FpsMode depth_fps, bool registration,
-		     bool synchronize, Device device_type)
+  NiStuffs::NiStuffs(int index, ResolutionMode rgb_res, ResolutionMode depth_res, 
+                     FpsMode rgb_fps, FpsMode depth_fps, bool registration,
+		     bool synchronize)
   {
     XnStatus status = XN_STATUS_OK;
     setOutputResolution(depthOutputMode, depth_res);
@@ -266,6 +267,7 @@ namespace openni_wrapper
     if (status != XN_STATUS_OK)
       NI_STATUS_ERROR("Failed to set SetMapOutputMode:\n ");
 
+    Device device_type;
     if (strcmp(driver.getProductName (index), "PrimeSense Device")==0)
       device_type = PRIMESENSE;
     if (!strcmp(driver.getProductName (index), "Asus"))

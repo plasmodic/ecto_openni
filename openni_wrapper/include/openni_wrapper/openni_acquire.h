@@ -127,7 +127,7 @@ namespace openni_wrapper
 
     //http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
     NiStuffs(int index, ResolutionMode rgb_res, ResolutionMode depth_res, FpsMode rgb_fps, FpsMode depth_fps, 
-	     bool registration, bool synchronize, Device device_type);
+	     bool registration, bool synchronize);
 
     ~NiStuffs();
 

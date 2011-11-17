@@ -124,8 +124,8 @@ int main(int argc, char **argv)
   if (!nistuffs)
     {
       std::cout << "Connecting to device." << std::endl;
-      nistuffs.reset(new NiStuffs(device_number, rgb_resolution, depth_resolution, rgb_fps, depth_fps, registration_on,
-				  sync_on, device));
+      nistuffs.reset(new NiStuffs(device_number, rgb_resolution, depth_resolution, 
+                                  rgb_fps, depth_fps, registration_on, sync_on));
       std::cout << "Connected to device." << std::endl;
     }
 
