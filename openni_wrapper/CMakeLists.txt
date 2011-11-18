@@ -10,7 +10,6 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${OPENNI_INCLUDE_DIR})
 message(STATUS "OpenNI headers: ${OPENNI_INCLUDE_DIR}")
 #INCLUDE_DIRECTORIES("/usr/include/openni")
-INCLUDE_DIRECTORIES("/usr/include/python2.6")
 
 find_package(OpenCV REQUIRED)
 if (OpenCV_FOUND)

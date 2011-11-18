@@ -359,20 +359,20 @@ namespace ecto_openni
     static void
     declare_params(tendrils& p)
     {
-      p.declare(&OpenNICapture::stream_mode_, "stream_mode", "The stream mode to capture. This is dynamic.");
-      p.declare(&OpenNICapture::registration_, "registration", "Should the depth be registered?", false);
-      p.declare(&OpenNICapture::latched_, "latched", "Should the output images be latched?", false);
+      p.declare<StreamMode>("stream_mode", "The stream mode to capture. This is dynamic.");
+      p.declare<bool>("registration", "Should the depth be registered?", false);
+      p.declare<bool>("latched", "Should the output images be latched?", false);
     }
 
     static void
     declare_io(const tendrils& p, tendrils& i, tendrils& o)
     {
-      o.declare(&OpenNICapture::depth_, "depth", "The depth stream.");
-      o.declare(&OpenNICapture::image_, "image", "The image stream.");
-      o.declare(&OpenNICapture::ir_, "ir", "The IR stream.");
-      o.declare(&OpenNICapture::focal_length_image_, "focal_length_image", "The focal length of the image stream.");
-      o.declare(&OpenNICapture::focal_length_depth_, "focal_length_depth", "The focal length of the depth stream.");
-      o.declare(&OpenNICapture::baseline_, "baseline", "The base line of the openni camera.");
+      o.declare<cv::Mat>("depth", "The depth stream.");
+      o.declare<cv::Mat>("image", "The image stream.");
+      o.declare<cv::Mat>("ir", "The IR stream.");
+      o.declare<float>("focal_length_image", "The focal length of the image stream.");
+      o.declare<float>("focal_length_depth", "The focal length of the depth stream.");
+      o.declare<float>("baseline", "The base line of the openni camera.");
     }
 
     void
