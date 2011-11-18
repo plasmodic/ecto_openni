@@ -8,7 +8,9 @@
 
 //openni includes
 #include <XnCppWrapper.h>
-#include "enums.hpp"
+#include <openni_wrapper/enums.hpp>
+using namespace openni_wrapper;
+
 #define NI_STATUS_ERROR(x) \
   do{std::stringstream s; s << x << std::string(xnGetStatusString(status)) << std::endl << __LINE__ << ":" << __FILE__ << std::endl;std::cerr << s.str() << std::endl;;}while(false)
 

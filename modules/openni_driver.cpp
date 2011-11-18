@@ -40,6 +40,7 @@
 #include <openni_wrapper/openni_image.h>
 #include <openni_wrapper/openni_depth_image.h>
 #include <openni_wrapper/openni_ir_image.h>
+#include <openni_wrapper/enums.hpp>
 #include <openni_wrapper/synchronizer.h>
 #include <iostream>
 #include <string>
@@ -48,8 +49,6 @@
 #include <opencv2/opencv.hpp>
 #include <boost/thread.hpp>
 #include <sys/times.h>
-
-#include "enums.hpp"
 
 using namespace std;
 using namespace openni_wrapper;
@@ -90,11 +89,11 @@ namespace ecto_openni
   {
     OpenNIStuff(unsigned device_index, int width, int height, int dwidth, int dheight, int nFPS);
     void
-    getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat& depth, cv::Mat& image, cv::Mat& ir);
+    getLatest(StreamMode mode, bool registration, cv::Mat& depth, cv::Mat& image, cv::Mat& ir);
     void
-    dataReady(ecto_openni::StreamMode mode, unsigned long stamp);
+    dataReady(StreamMode mode, unsigned long stamp);
     void
-    start(ecto_openni::StreamMode mode, bool registration);
+    start(StreamMode mode, bool registration);
     void
     imageCallback(boost::shared_ptr<Image> image, void* cookie);
     void
@@ -139,7 +138,7 @@ namespace ecto_openni
     boost::mutex mut;
     int data_ready;
     bool registration_mode_;
-    ecto_openni::StreamMode stream_mode_;
+    StreamMode stream_mode_;
     XnMapOutputMode rgb_output_mode_, depth_output_mode_;
     double timestamps[3];
   };
@@ -214,7 +213,7 @@ namespace ecto_openni
 
     unsigned char* buffer = (unsigned char*) (rgb.data);
     image->fillRGB(rgb.cols, rgb.rows, buffer, rgb.step);
-    dataReady(ecto_openni::RGB, image->getTimeStamp());
+    dataReady(RGB, image->getTimeStamp());
   }
 
   void
@@ -225,7 +224,7 @@ namespace ecto_openni
 
     uint16_t* buffer = (uint16_t*) (ir.data);
     image->fillRaw(ir.cols, ir.rows, buffer, ir.step);
-    dataReady(ecto_openni::IR, image->getTimeStamp());
+    dataReady(IR, image->getTimeStamp());
   }
 
   void
@@ -236,11 +235,11 @@ namespace ecto_openni
 
     uint16_t* buffer = (uint16_t*) depth.data;
     image->fillDepthImageRaw(depth.cols, depth.rows, buffer, depth.step);
-    dataReady(ecto_openni::DEPTH, image->getTimeStamp());
+    dataReady(DEPTH, image->getTimeStamp());
   }
 
   void
-  OpenNIStuff::dataReady(ecto_openni::StreamMode mode, unsigned long stamp)
+  OpenNIStuff::dataReady(StreamMode mode, unsigned long stamp)
   {
     {
       boost::lock_guard<boost::mutex> lock(mut);
@@ -251,7 +250,7 @@ namespace ecto_openni
   }
 
   void
-  OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, cv::Mat& depth, cv::Mat& image, cv::Mat& ir)
+  OpenNIStuff::getLatest(StreamMode mode, bool registration, cv::Mat& depth, cv::Mat& image, cv::Mat& ir)
   {
     const double time_diff_max = 20;
     std::string connection = devices_[selected_device_]->getConnectionString();
@@ -267,11 +266,11 @@ namespace ecto_openni
       cond.wait(lock);
     }
     bool check_sync = false;
-    double depth_stamp = timestamps[int(log(double(ecto_openni::DEPTH)) / log(2.0))];
-    double rgb_stamp = timestamps[int(log(double(ecto_openni::RGB)) / log(2.0))];
-    double ir_stamp = timestamps[int(log(double(ecto_openni::IR)) / log(2.0))];
+    double depth_stamp = timestamps[int(log(double(DEPTH)) / log(2.0))];
+    double rgb_stamp = timestamps[int(log(double(RGB)) / log(2.0))];
+    double ir_stamp = timestamps[int(log(double(IR)) / log(2.0))];
 
-    if (mode & ecto_openni::DEPTH)
+    if (mode & DEPTH)
     {
       Mat depth_ = depth_images_[connection];
       depth_.copyTo(depth);
@@ -280,7 +279,7 @@ namespace ecto_openni
     {
       check_sync = false;
     }
-    if (mode & ecto_openni::IR)
+    if (mode & IR)
     {
 //    std::cout << "IR vs Depth:" << ir_stamp - depth_stamp << std::endl;
       Mat ir_ = ir_images_[connection];
@@ -289,17 +288,17 @@ namespace ecto_openni
       {
         if (depth_stamp - ir_stamp > time_diff_max) //ir_stamp too old...
         {
-          data_ready = data_ready ^ ecto_openni::IR; //wipe out IR
+          data_ready = data_ready ^ IR; //wipe out IR
           goto wait_for_data;
         }
         else if (ir_stamp - depth_stamp > time_diff_max) //depth too old.
         {
-          data_ready = data_ready ^ ecto_openni::DEPTH; //wipe out depth data
+          data_ready = data_ready ^ DEPTH; //wipe out depth data
           goto wait_for_data;
         }
       }
     }
-    if (mode & ecto_openni::RGB)
+    if (mode & RGB)
     {
 //    std::cout << "RGB vs Depth:" << rgb_stamp - depth_stamp << std::endl;
       Mat image_ = rgb_images_[connection];
@@ -308,12 +307,12 @@ namespace ecto_openni
       {
         if (depth_stamp - rgb_stamp > time_diff_max) //rgb too old...
         {
-          data_ready = data_ready ^ ecto_openni::RGB; //wipe out RGB
+          data_ready = data_ready ^ RGB; //wipe out RGB
           goto wait_for_data;
         }
         else if (rgb_stamp - depth_stamp > time_diff_max) //depth too old.
         {
-          data_ready = data_ready ^ ecto_openni::DEPTH; //wipe out DEPTH
+          data_ready = data_ready ^ DEPTH; //wipe out DEPTH
           goto wait_for_data;
         }
       }
@@ -322,7 +321,7 @@ namespace ecto_openni
   }
 
   void
-  OpenNIStuff::start(ecto_openni::StreamMode mode, bool registered)
+  OpenNIStuff::start(StreamMode mode, bool registered)
   {
     boost::shared_ptr<OpenNIDevice> device = devices_[selected_device_];
 
@@ -330,7 +329,7 @@ namespace ecto_openni
     {
       device->setDepthRegistration(registered);
     }
-    if (mode & ecto_openni::DEPTH)
+    if (mode & DEPTH)
     {
       device->startDepthStream();
     }
@@ -339,12 +338,12 @@ namespace ecto_openni
       device->stopDepthStream();
     }
 
-    if (mode & ecto_openni::IR)
+    if (mode & IR)
     {
       device->stopImageStream();
       device->startIRStream();
     }
-    if (mode & ecto_openni::RGB)
+    if (mode & RGB)
     {
       device->stopIRStream();
       device->startImageStream();

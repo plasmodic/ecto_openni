@@ -1,12 +1,13 @@
 #include <ecto/ecto.hpp>
 
-#include "enums.hpp"
-using namespace ecto_openni;
+#include <openni_wrapper/enums.hpp>
+using namespace openni_wrapper;
 namespace ecto_openni
 {
 void wrap_openni_enumerate();
 }
 
+using namespace ecto_openni;
 ECTO_DEFINE_MODULE(ecto_openni){
   boost::python::enum_<ResolutionMode>("ResolutionMode")
     .value("QQVGA_RES",QQVGA_RES)
