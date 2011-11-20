@@ -23,8 +23,8 @@ struct IRGamma
   static void
   declare_io(const ecto::tendrils& p, ecto::tendrils& i, ecto::tendrils& o)
   {
-    i.declare<cv::Mat>("image", "An 16 bit IR image.").required(true);
-    o.declare<cv::Mat>("image", "The gamma corrected 8 bit version of the IR image.");
+    i.declare(&IRGamma::input_, "image", "An 16 bit IR image.").required(true);
+    o.declare(&IRGamma::output_, "image", "The gamma corrected 8 bit version of the IR image.");
   }
 
   int

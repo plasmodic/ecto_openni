@@ -31,7 +31,7 @@
 //#define XN_1080P_X_RES  1920
 //#define XN_1080P_Y_RES  1080
 
-namespace openni_wrapper
+namespace ecto_openni
 {
   enum ResolutionMode
   {
@@ -40,7 +40,7 @@ namespace openni_wrapper
 
   enum FpsMode
   {
-    FPS_15, FPS_25, FPS_30, FPS_60,
+    FPS_15, FPS_30, FPS_60,
   };
 
   enum Device

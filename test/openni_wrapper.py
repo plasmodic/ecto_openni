@@ -9,11 +9,9 @@ capture = OpenNICapture(stream_mode=DEPTH_RGB, registration=True)
 fps = FPSDrawer('fps')
 plasm = ecto.Plasm()
 plasm.connect(capture['image'] >> fps[:],
-               fps[:] >> imshow('image display', name='image')[:],
-               capture['depth'] >> imshow('depth display', name='depth')[:],
-               )
-
-#plasm.insert(capture)
+              fps[:] >> imshow('image display', name='image')[:],
+              capture['depth'] >> imshow('depth display', name='depth')[:],
+              )
 
 sched = ecto.schedulers.Singlethreaded(plasm)
 sched.execute()
