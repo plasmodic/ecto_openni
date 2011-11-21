@@ -57,7 +57,7 @@ using namespace cv;
 using namespace boost;
 namespace bp = boost::python;
 
-#define DEBUG_TIMING
+// #define DEBUG_TIMING
 
 namespace ecto_openni
 {
@@ -323,8 +323,10 @@ namespace ecto_openni
     }
     if (mode & ecto_openni::RGB)
     {
+#ifdef DEBUG_TIMING
       if (!check_sync) 
 	std::cout << "RGB vs Depth:" << rgb_stamp - depth_stamp << std::endl;
+#endif
       Mat image_ = rgb_images_[connection];
       image_.copyTo(image);
       if (check_sync)
@@ -353,14 +355,14 @@ namespace ecto_openni
   {
     boost::shared_ptr<OpenNIDevice> device = devices_[selected_device_];
 
-    if (first_ || registered != registration_mode_ && device->isDepthRegistrationSupported())
+    if ((first_ || registered != registration_mode_) && device->isDepthRegistrationSupported())
     {
       cout << "Setting registration" << endl;
       device->setDepthRegistration(registered);
     }
-    if (first_ || synced != sync_mode_ && device->isSynchronizationSupported())
+    if ((first_ || synced != sync_mode_) && device->isSynchronizationSupported())
     {
-      cout << "Setting sync" << endl;
+      cout << "Setting sync " << synced << " " << sync_mode_ << endl;
       device->setSynchronization(synced);
     }
     if (mode & ecto_openni::DEPTH)
@@ -383,7 +385,7 @@ namespace ecto_openni
       device->startImageStream();
     }
     registration_mode_ = registered;
-    sync_mode_ = sync;
+    sync_mode_ = synced;
     stream_mode_ = mode;
     data_ready = 0;
   }
