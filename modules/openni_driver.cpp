@@ -203,6 +203,8 @@ namespace ecto_openni
         throw std::runtime_error(ss.str());
       }
       depth_images_[device->getConnectionString()] = Mat::zeros(height, width, CV_16UC1);
+      cv::Mat depth = depth_images_[device->getConnectionString()];
+
       device->registerDepthCallback(&OpenNIStuff::depthCallback, *this, &(*device));
     }
   }
@@ -360,8 +362,8 @@ namespace ecto_openni
     static void
     declare_params(tendrils& p)
     {
-      p.declare(&OpenNICapture::stream_mode_, "stream_mode", "The stream mode to capture. This is dynamic.");
-      p.declare(&OpenNICapture::registration_, "registration", "Should the depth be registered?", false);
+      p.declare(&OpenNICapture::stream_mode_, "stream_mode", "The stream mode to capture. This is dynamic.",DEPTH_RGB);
+      p.declare(&OpenNICapture::registration_, "registration", "Should the depth be registered?", true);
       p.declare(&OpenNICapture::latched_, "latched", "Should the output images be latched?", false);
     }
 
@@ -371,6 +373,7 @@ namespace ecto_openni
       o.declare(&OpenNICapture::depth_, "depth", "The depth stream.");
       o.declare(&OpenNICapture::image_, "image", "The image stream.");
       o.declare(&OpenNICapture::ir_, "ir", "The IR stream.");
+      o.declare(&OpenNICapture::K_, "K", "A 3x3 camera matrix, double type.");
       o.declare(&OpenNICapture::focal_length_image_, "focal_length_image", "The focal length of the image stream.");
       o.declare(&OpenNICapture::focal_length_depth_, "focal_length_depth", "The focal length of the depth stream.");
       o.declare(&OpenNICapture::baseline_, "baseline", "The base line of the openni camera.");
@@ -406,11 +409,18 @@ namespace ecto_openni
       }
       *focal_length_depth_ = device_->getDepthFocalLength();
       *focal_length_image_ = device_->getImageFocalLength();
+      K_->create(3, 3, CV_64FC1);
+      cv: Mat_<double> K = *K_;
+      K = 0;
+      K(0, 0) = K(1, 1) = *focal_length_image_;
+      K(0, 2) = image_->size().width / 2 + 0.5;
+      K(1, 2) = image_->size().height / 2 + 0.5;
+      K(2, 2) = 1;
       *baseline_ = device_->getBaseline();
       return ecto::OK;
     }
     ecto::spore<StreamMode> stream_mode_;
-    ecto::spore<cv::Mat> depth_, ir_, image_;
+    ecto::spore<cv::Mat> depth_, ir_, image_, K_;
     boost::shared_ptr<OpenNIStuff> device_;
     ecto::spore<bool> registration_, latched_;
     ecto::spore<float> focal_length_image_, focal_length_depth_, baseline_;
