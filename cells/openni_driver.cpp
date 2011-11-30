@@ -57,7 +57,7 @@ using namespace cv;
 using namespace boost;
 namespace bp = boost::python;
 
-// #define DEBUG_TIMING
+//#define DEBUG_TIMING
 
 namespace ecto_openni
 {
@@ -91,7 +91,8 @@ namespace ecto_openni
 
   struct OpenNIStuff
   {
-    OpenNIStuff(unsigned device_index, int width, int height, int dwidth, int dheight, int nFPS);
+    OpenNIStuff(unsigned device_index, ResolutionMode image_mode, ResolutionMode depth_mode, FpsMode image_fps,
+                FpsMode depth_fps);
     void
     getLatest(ecto_openni::StreamMode mode, bool registration, bool sync, cv::Mat& depth, cv::Mat& image, cv::Mat& ir);
     void
@@ -151,12 +152,13 @@ namespace ecto_openni
     double timestamps[3];
   };
 
-  OpenNIStuff::OpenNIStuff(unsigned device_index, int width, int height, int depth_width, int depth_height, int nFPS)
+  OpenNIStuff::OpenNIStuff(unsigned device_index, ResolutionMode image_mode, ResolutionMode depth_mode,
+                           FpsMode image_fps, FpsMode depth_fps)
       :
         selected_device_(0),
         registration_mode_(true),
         sync_mode_(false),
-	first_(true)
+        first_(true)
   {
     OpenNIDriver& driver = OpenNIDriver::getInstance();
 
@@ -173,11 +175,10 @@ namespace ecto_openni
     selected_device_ = devices_.size();
     devices_.push_back(device);
     XnMapOutputMode mode;
-    mode.nXRes = width;
-    mode.nYRes = height;
-    mode.nFPS = nFPS;
+    setMode(mode, image_mode);
+    mode.nFPS = image_fps;
 
-    time_diff_max_ = 1.0 / (double)nFPS;
+    time_diff_max_ = 1.0 / (double) image_fps;
     time_diff_max_ = time_diff_max_ * 500.0 + 0.2; // in ms
     cout << "Time diff max: " << time_diff_max_ << endl;
 
@@ -189,10 +190,13 @@ namespace ecto_openni
         ss << "image stream mode " << mode.nXRes << " x " << mode.nYRes << " @ " << mode.nFPS << " not supported";
         throw std::runtime_error(ss.str());
       }
-      rgb_images_[device->getConnectionString()] = Mat::zeros(height, width, CV_8UC3);
-      gray_images_[device->getConnectionString()] = Mat::zeros(height, width, CV_8UC1);
+      rgb_images_[device->getConnectionString()] = Mat::zeros(mode.nYRes, mode.nXRes, CV_8UC3);
+      gray_images_[device->getConnectionString()] = Mat::zeros(mode.nYRes, mode.nXRes, CV_8UC1);
       device->registerImageCallback(&OpenNIStuff::imageCallback, *this, &(*device));
     }
+
+    setMode(mode, depth_mode);
+    mode.nFPS = depth_fps;
 
     if (device->hasIRStream())
     {
@@ -202,7 +206,7 @@ namespace ecto_openni
         ss << "IR stream mode " << mode.nXRes << " x " << mode.nYRes << " @ " << mode.nFPS << " not supported";
         throw std::runtime_error(ss.str());
       }
-      ir_images_[device->getConnectionString()] = Mat::zeros(height, width, CV_16UC1);
+      ir_images_[device->getConnectionString()] = Mat::zeros(mode.nYRes, mode.nXRes, CV_16UC1);
       device->registerIRCallback(&OpenNIStuff::irCallback, *this, &(*device));
     }
 
@@ -216,7 +220,7 @@ namespace ecto_openni
            << endl;
         throw std::runtime_error(ss.str());
       }
-      depth_images_[device->getConnectionString()] = Mat::zeros(height, width, CV_16UC1);
+      depth_images_[device->getConnectionString()] = Mat::zeros(mode.nYRes, mode.nXRes, CV_16UC1);
       cv::Mat depth = depth_images_[device->getConnectionString()];
 
       device->registerDepthCallback(&OpenNIStuff::depthCallback, *this, &(*device));
@@ -266,16 +270,25 @@ namespace ecto_openni
   void
   OpenNIStuff::dataReady(ecto_openni::StreamMode mode, unsigned long stamp)
   {
+    do
     {
       boost::lock_guard<boost::mutex> lock(mut);
+      if (data_ready & mode)
+      {
+#ifdef DEBUG_TIMING
+        std::cout << "dropping frame." << std::endl;
+        break;
+#endif
+      }
       data_ready |= mode;
       timestamps[int(log(double(mode)) / log(2.0))] = stamp * 1.0e-3; //to milliseconds
-    }
+    } while (false);
     cond.notify_one();
   }
 
   void
-  OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, bool sync, cv::Mat& depth, cv::Mat& image, cv::Mat& ir)
+  OpenNIStuff::getLatest(ecto_openni::StreamMode mode, bool registration, bool sync, cv::Mat& depth, cv::Mat& image,
+                         cv::Mat& ir)
   {
     std::string connection = devices_[selected_device_]->getConnectionString();
     if (first_ || stream_mode_ != mode || registration_mode_ != registration || sync_mode_ != sync)
@@ -326,8 +339,8 @@ namespace ecto_openni
     if (mode & ecto_openni::RGB)
     {
 #ifdef DEBUG_TIMING
-      if (!check_sync) 
-	std::cout << "RGB vs Depth:" << rgb_stamp - depth_stamp << std::endl;
+      if (!check_sync)
+        std::cout << "RGB vs Depth:" << rgb_stamp - depth_stamp << std::endl;
 #endif
       Mat image_ = rgb_images_[connection];
       image_.copyTo(image);
@@ -344,8 +357,9 @@ namespace ecto_openni
           goto wait_for_data;
         }
 #ifdef DEBUG_TIMING
-	std::cout << "Sync RGB vs Depth:" << rgb_stamp - depth_stamp << " diff at interval: " << rgb_stamp - old_rgb_stamp_ << std::endl;
-	old_rgb_stamp_ = rgb_stamp;
+        std::cout << "Sync RGB vs Depth:" << rgb_stamp - depth_stamp << " diff at interval: "
+                  << rgb_stamp - old_rgb_stamp_ << std::endl;
+        old_rgb_stamp_ = rgb_stamp;
 #endif
       }
     }
@@ -398,7 +412,9 @@ namespace ecto_openni
     static void
     declare_params(tendrils& p)
     {
-      p.declare(&OpenNICapture::stream_mode_, "stream_mode", "The stream mode to capture. This is dynamic.",DEPTH_RGB);
+      p.declare(&OpenNICapture::depth_mode_, "depth_mode", "The resolution mode for depth.", VGA_RES);
+      p.declare(&OpenNICapture::image_mode_, "image_mode", "The resolution mode for depth.", VGA_RES);
+      p.declare(&OpenNICapture::stream_mode_, "stream_mode", "The stream mode to capture. This is dynamic.", DEPTH_RGB);
       p.declare(&OpenNICapture::registration_, "registration", "Should the depth be registered?", true);
       p.declare(&OpenNICapture::sync_, "sync", "Should the depth be synced?", false);
       p.declare(&OpenNICapture::latched_, "latched", "Should the output images be latched?", false);
@@ -419,15 +435,15 @@ namespace ecto_openni
     void
     configure(const tendrils& p, const tendrils& i, const tendrils& o)
     {
-      connect(0, 640, 480, 30);
-      device_->first_ = true;
+      connect(0, *image_mode_, *depth_mode_, FPS_30, FPS_30);
     }
 
     void
-    connect(unsigned device_index, int width, int height, int nFPS)
+    connect(unsigned device_index, ResolutionMode image_mode, ResolutionMode depth_mode, FpsMode image_fps,
+            FpsMode depth_fps)
     {
-      device_.reset(new OpenNIStuff(device_index, width, height, width, height, nFPS));
-
+      device_.reset(new OpenNIStuff(device_index, image_mode, depth_mode, image_fps, depth_fps));
+      device_->first_ = true;
     }
 
     int
@@ -459,6 +475,7 @@ namespace ecto_openni
       return ecto::OK;
     }
     ecto::spore<StreamMode> stream_mode_;
+    ecto::spore<ResolutionMode> depth_mode_, image_mode_;
     ecto::spore<cv::Mat> depth_, ir_, image_, K_;
     boost::shared_ptr<OpenNIStuff> device_;
     ecto::spore<bool> registration_, sync_, latched_;

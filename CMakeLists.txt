@@ -25,7 +25,7 @@ find_package(Boost COMPONENTS serialization filesystem system REQUIRED)
 
 include_directories(openni_wrapper/include)
 add_subdirectory(openni_wrapper)
-add_subdirectory(modules)
+add_subdirectory(cells)
 
 option(BUILD_TEST "Build tests" ON)
 if(BUILD_TEST)
