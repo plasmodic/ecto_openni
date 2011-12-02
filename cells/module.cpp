@@ -28,6 +28,13 @@ ECTO_DEFINE_MODULE(ecto_openni){
     .export_values()
     ;
 
+  boost::python::enum_<FpsMode>("FpsMode")
+    .value("FPS_15",FPS_15)
+    .value("FPS_30",FPS_30)
+    .value("FPS_60",FPS_60)
+    .export_values()
+    ;
+
   boost::python::enum_<StreamMode>("StreamMode")
     .value("DEPTH",DEPTH)
     .value("RGB",RGB)
