@@ -12,9 +12,6 @@ find_package(ecto REQUIRED)
 #all the ecto modules will be put here.
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-#generates a python environment script
-ecto_python_env_gen(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-
 find_package(OpenCV REQUIRED)
 find_package(Boost COMPONENTS serialization filesystem system REQUIRED)
 
