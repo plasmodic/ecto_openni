@@ -19,6 +19,8 @@ include_directories(openni_wrapper/include)
 add_subdirectory(openni_wrapper)
 add_subdirectory(cells)
 
+sphinx(${CMAKE_CURRENT_SOURCE_DIR}/doc doc)
+
 option(BUILD_TEST "Build tests" ON)
 if(BUILD_TEST)
   enable_testing()
