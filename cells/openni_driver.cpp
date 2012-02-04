@@ -73,7 +73,6 @@ namespace ecto_openni
     {
       boost::shared_ptr<OpenNIDevice> device = driver.getDeviceByIndex(i);
       std::string serial_number = device->getSerialNumber();
-      int index = i;
       std::string vendor_name = device->getVendorName();
       int vendor_id = device->getVendorID();
       bp::dict dev;
@@ -485,7 +484,7 @@ namespace ecto_openni
       *focal_length_depth_ = device_->getDepthFocalLength();
       *focal_length_image_ = device_->getImageFocalLength();
       K_->create(3, 3, CV_64FC1);
-      cv: Mat_<double> K = *K_;
+      cv::Mat_<double> K = *K_;
       K = 0;
       K(0, 0) = K(1, 1) = *focal_length_image_;
       K(0, 2) = image_->size().width / 2 + 0.5;
