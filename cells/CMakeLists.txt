@@ -3,6 +3,8 @@ set (SRCS
   module.cpp
   Capture.cpp
   IRGamma.cpp
+  KinectKGenerator.cpp
+  KinectMaskGenerator.cpp
   openni_driver.cpp
   )
 
