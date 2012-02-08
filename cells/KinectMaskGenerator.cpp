@@ -12,7 +12,7 @@ cv::Mat_<uint8_t>
 kinectMask()
 {
   // Magic value for DepthFilter
-  unsigned int left = 15, right = 50, top = 50, bottom = 15;
+  unsigned int left = 15, right = 60, top = 50, bottom = 15;
 
   cv::Mat mask = cv::Mat::zeros(cv::Size(640, 480), CV_8UC1);
 
