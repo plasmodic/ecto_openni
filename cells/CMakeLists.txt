@@ -1,4 +1,4 @@
-include_directories(${OPENNI_INCLUDE_DIR})
+include_directories(SYSTEM ${OPENNI_INCLUDE_DIR})
 set (SRCS 
   module.cpp
   Capture.cpp
