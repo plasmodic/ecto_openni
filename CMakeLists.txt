@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(ecto_openni)
 
+# Deal with catkin
+find_package(catkin REQUIRED)
+catkin_stack()
+catkin_project(ecto_openni)
+
 include(cmake/openni.cmake)
 if(NOT ${HAVE_OPENNI})
   message(STATUS "Will not be building ecto_openni, as openni has not been found.")
@@ -10,7 +15,9 @@ endif()
 find_package(ecto REQUIRED)
 
 #all the ecto modules will be put here.
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+endif()
 
 find_package(OpenCV REQUIRED)
 find_package(Boost COMPONENTS serialization filesystem system REQUIRED)
@@ -26,3 +33,6 @@ if(BUILD_TEST)
   enable_testing()
   add_subdirectory(test)
 endif()
+
+# add the catkin hooks (they need PYTHON_PACKAGES_PATH from ecto)
+catkin_add_env_hooks(10.ecto_openni SHELLS all)

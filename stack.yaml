@@ -1,11 +1,11 @@
 Catkin-ProjectName: ecto_openni
-Version: 0.1.1
+Version: 0.3.0
 Description: Ecto bindings for the openni sensor.
 Author: Ethan Rublee <erublee@willowgarage.com>
 Maintainer:  Ethan Rublee <erublee@willowgarage.com>
 Homepage:  http://ecto.willowgarage.com
 
-Depends: catkin, boost, ecto, opencv
+Depends: catkin, boost, ecto, opencv, openni-dev
 
 Catkin-CopyrightType:  willowgarage
-
+Catkin-DebRulesType: cmake
