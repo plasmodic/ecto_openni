@@ -5,7 +5,7 @@ Author: Ethan Rublee <erublee@willowgarage.com>
 Maintainer:  Ethan Rublee <erublee@willowgarage.com>
 Homepage:  http://ecto.willowgarage.com
 
-Depends: catkin, boost, ecto, opencv, openni-dev
+Depends: catkin, boost, ecto, opencv2, openni-dev
 
 Catkin-CopyrightType:  willowgarage
 Catkin-DebRulesType: cmake
