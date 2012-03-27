@@ -14,6 +14,8 @@ endif()
 
 find_package(ecto REQUIRED)
 
+set_ecto_install_package_name()
+
 #all the ecto modules will be put here.
 if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -33,6 +35,3 @@ if(BUILD_TEST)
   enable_testing()
   add_subdirectory(test)
 endif()
-
-# add the catkin hooks (they need PYTHON_PACKAGES_PATH from ecto)
-catkin_add_env_hooks(10.ecto_openni SHELLS all)
