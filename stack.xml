@@ -1,0 +1,25 @@
+<stack>
+  <name>ecto_openni</name>
+  <version>0.3.3</version>
+  <description>Ecto bindings for the openni sensor.</description>
+  <author email="erublee@willowgarage.com">Ethan Rublee</author>
+  <maintainer email="vrabaud@willowgarage.com">Vincent Rabaud</maintainer>
+  <maintainer>Vincent Rabaud vrabaud@willowgarage.com</maintainer>
+  <license>BSD</license>
+  <copyright>WIllow Garage</copyright>
+
+  <url>http://ecto.willowgarage.com</url>
+  <build_depends>catkin</build_depends>
+  <build_depends>boost</build_depends>
+  <build_depends>ecto</build_depends>
+  <build_depends>libusb-1.0-dev</build_depends>
+  <build_depends>opencv2</build_depends>
+  <build_depends>openni-dev</build_depends>
+  <build_depends>ps-engine</build_depends>
+  <depends>boost</depends>
+  <depends>ecto</depends>
+  <depends>libusb-1.0-dev</depends>
+  <depends>opencv2</depends>
+  <depends>openni-dev</depends>
+  <depends>ps-engine</depends>
+</stack>
