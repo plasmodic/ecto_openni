@@ -30,7 +30,10 @@ set_source_files_properties(${SRCS}
 
 ADD_LIBRARY(openni_wrapper SHARED ${SRCS})
 
-TARGET_LINK_LIBRARIES(openni_wrapper openni_wrapper boost_thread ${OpenCV_LIBS} OpenNI)
+target_link_libraries(openni_wrapper ${Boost_LIBRARIES}
+                                     ${OpenCV_LIBRARIES}
+                                     OpenNI
+)
 install(TARGETS openni_wrapper
   DESTINATION lib)
 
