@@ -14,8 +14,6 @@ endif()
 
 find_package(ecto REQUIRED)
 
-set_ecto_install_package_name()
-
 #all the ecto modules will be put here.
 if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
