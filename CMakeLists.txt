@@ -3,8 +3,12 @@ project(ecto_openni)
 
 # Deal with catkin
 find_package(catkin REQUIRED)
+if (${catkin_VERSION} VERSION_GREATER "0.5.26")
+catkin_package()
+else()
 catkin_stack()
 catkin_project(ecto_openni)
+endif()
 
 include(cmake/openni.cmake)
 if(NOT ${HAVE_OPENNI})
