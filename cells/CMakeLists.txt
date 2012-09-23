@@ -8,7 +8,7 @@ set (SRCS
   openni_driver.cpp
   )
 
-ectomodule(ecto_openni ${SRCS})
+ectomodule(ecto_openni DESTINATION ./ INSTALL ${SRCS})
 
 set_source_files_properties(${SRCS}
   PROPERTIES

@@ -4,11 +4,10 @@
   <description>Ecto bindings for the openni sensor.</description>
   <author email="erublee@willowgarage.com">Ethan Rublee</author>
   <maintainer email="vrabaud@willowgarage.com">Vincent Rabaud</maintainer>
-  <maintainer email="vrabaud@willowgarage.com">Vincent Rabaud vrabaud@willowgarage.com</maintainer>
   <license>BSD</license>
   <copyright>WIllow Garage</copyright>
-
   <url>http://ecto.willowgarage.com</url>
+
   <build_depend>catkin</build_depend>
   <build_depend>boost</build_depend>
   <build_depend>ecto</build_depend>

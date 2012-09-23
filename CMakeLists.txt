@@ -3,11 +3,17 @@ project(ecto_openni)
 
 # Deal with catkin
 find_package(catkin REQUIRED)
+
 if (${catkin_VERSION} VERSION_GREATER "0.5.26")
 catkin_package()
+catkin_package_export()
 else()
 catkin_stack()
 catkin_project(ecto_openni)
+#all the ecto modules will be put here.
+if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+endif()
 endif()
 
 include(cmake/openni.cmake)
@@ -16,15 +22,9 @@ if(NOT ${HAVE_OPENNI})
   return()
 endif()
 
-find_package(ecto REQUIRED)
-
-#all the ecto modules will be put here.
-if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-endif()
-
-find_package(OpenCV REQUIRED)
 find_package(Boost COMPONENTS serialization filesystem system REQUIRED)
+find_package(ecto REQUIRED)
+find_package(OpenCV REQUIRED)
 
 include_directories(openni_wrapper/include)
 add_subdirectory(openni_wrapper)
