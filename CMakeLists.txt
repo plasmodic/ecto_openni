@@ -6,7 +6,6 @@ find_package(catkin REQUIRED)
 
 if (${catkin_VERSION} VERSION_GREATER "0.5.26")
 catkin_package()
-catkin_package_export()
 else()
 catkin_stack()
 catkin_project(ecto_openni)
