@@ -1,4 +1,4 @@
-.. ecto_openni:
+.. _ecto_openni:
 
 ecto_openni
 ===========

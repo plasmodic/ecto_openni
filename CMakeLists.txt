@@ -29,7 +29,7 @@ include_directories(openni_wrapper/include)
 add_subdirectory(openni_wrapper)
 add_subdirectory(cells)
 
-#catkin_sphinx(${CMAKE_CURRENT_SOURCE_DIR}/doc doc)
+ecto_sphinx(${CMAKE_CURRENT_SOURCE_DIR}/doc doc)
 
 option(BUILD_TEST "Build tests" ON)
 if(BUILD_TEST)
