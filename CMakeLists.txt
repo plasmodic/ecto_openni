@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 2.8)
 project(ecto_openni)
 
 # Deal with catkin
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED ecto)
 
 if (${catkin_VERSION} VERSION_GREATER "0.5.26")
-catkin_package()
+catkin_package(DEPENDS ecto)
 else()
 catkin_stack()
-catkin_project(ecto_openni)
+catkin_project(ecto_openni DEPENDS ecto)
 #all the ecto modules will be put here.
 if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
