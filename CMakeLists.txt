@@ -15,6 +15,8 @@ if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
 endif()
 endif()
 
+include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
+
 include(cmake/openni.cmake)
 if(NOT ${HAVE_OPENNI})
   message(STATUS "Will not be building ecto_openni, as openni has not been found.")
@@ -22,7 +24,6 @@ if(NOT ${HAVE_OPENNI})
 endif()
 
 find_package(Boost COMPONENTS serialization filesystem system REQUIRED)
-find_package(ecto REQUIRED)
 find_package(OpenCV REQUIRED)
 
 include_directories(openni_wrapper/include)
