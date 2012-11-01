@@ -3,6 +3,7 @@ project(ecto_openni)
 
 # Deal with catkin
 find_package(catkin REQUIRED ecto)
+find_package(ecto)
 
 if (${catkin_VERSION} VERSION_GREATER "0.5.26")
 catkin_package(DEPENDS ecto)
@@ -23,7 +24,7 @@ if(NOT ${HAVE_OPENNI})
   return()
 endif()
 
-find_package(Boost COMPONENTS serialization filesystem system REQUIRED)
+find_package(Boost COMPONENTS serialization filesystem system thread REQUIRED)
 find_package(OpenCV REQUIRED)
 
 include_directories(openni_wrapper/include)
