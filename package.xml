@@ -7,7 +7,6 @@
   <license>BSD</license>
   <url>http://ecto.willowgarage.com</url>
 
-  <build_depend>catkin</build_depend>
   <build_depend>boost</build_depend>
   <build_depend>ecto</build_depend>
   <build_depend>libusb-1.0-dev</build_depend>
@@ -21,4 +20,6 @@
   <run_depend>opencv2</run_depend>
   <run_depend>openni-dev</run_depend>
   <run_depend>ps-engine</run_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
 </package>
