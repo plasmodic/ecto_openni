@@ -28,6 +28,9 @@ find_package(Boost COMPONENTS serialization filesystem system thread REQUIRED)
 find_package(OpenCV REQUIRED)
 
 include_directories(openni_wrapper/include)
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS}
+                           ${OpenCV_INCLUDE_DIRS}
+)
 add_subdirectory(openni_wrapper)
 add_subdirectory(cells)
 
