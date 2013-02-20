@@ -1,0 +1,178 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Cells &mdash; ecto_openni</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ecto_openni" href="index.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="ecto_openni" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="ecto_openni"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ecto_openni</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">ecto_openni</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/cells.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cells">
+<h1>Cells<a class="headerlink" href="#cells" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Capture">
+<span id="index-0"></span><span id="ecto_openni.Capture"></span><h2>Capture<a class="headerlink" href="#Capture" title="Permalink to this headline">¶</a></h2>
+<p></p>
+<div class="topic">
+<p class="topic-title first">Brief doc<p>Raw data capture off of an OpenNI device.</p>
+</p>
+<p class="topic-title first">Parameters<ul>
+<li><p class="first"><strong>depth_fps</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">int</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">30</span></tt></p>
+<p>The depth frame rate.</p>
+</li>
+<li><p class="first"><strong>depth_resolution</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">ecto_openni::ResolutionMode</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">VGA_RES</span></tt><p><em>Legal Values: </em><tt class="docutils literal"><span class="pre">QQVGA_RES</span> <span class="pre">(0)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">CGA_RES</span> <span class="pre">(1)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">QVGA_RES</span> <span class="pre">(2)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">VGA_RES</span> <span class="pre">(3)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">XGA_RES</span> <span class="pre">(4)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">HD720P_RES</span> <span class="pre">(5)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">SXGA_RES</span> <span class="pre">(6)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">UXGA_RES</span> <span class="pre">(7)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">HD1080P_RES</span> <span class="pre">(8)</span>&nbsp;&nbsp; </tt></p>
+</p>
+<p>Depth mode.</p>
+</li>
+<li><p class="first"><strong>device</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">ecto_openni::Device</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">KINECT</span></tt><p><em>Legal Values: </em><tt class="docutils literal"><span class="pre">KINECT</span> <span class="pre">(0)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">PRIMESENSE</span> <span class="pre">(1)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">ASUS_XTION_PRO_LIVE</span> <span class="pre">(2)</span>&nbsp;&nbsp; </tt></p>
+</p>
+<p>The type of device</p>
+</li>
+<li><p class="first"><strong>device_number</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">int</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">0</span></tt></p>
+<p>The device number.</p>
+</li>
+<li><p class="first"><strong>device_uid</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">std::string</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">NA</span></tt></p>
+<p>Unique identifier for device to use. fixme</p>
+</li>
+<li><p class="first"><strong>registration</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">bool</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">True</span></tt></p>
+<p>Turn registration on.</p>
+</li>
+<li><p class="first"><strong>rgb_fps</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">int</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">30</span></tt></p>
+<p>The rgb frame rate.</p>
+</li>
+<li><p class="first"><strong>rgb_resolution</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">ecto_openni::ResolutionMode</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">VGA_RES</span></tt><p><em>Legal Values: </em><tt class="docutils literal"><span class="pre">QQVGA_RES</span> <span class="pre">(0)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">CGA_RES</span> <span class="pre">(1)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">QVGA_RES</span> <span class="pre">(2)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">VGA_RES</span> <span class="pre">(3)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">XGA_RES</span> <span class="pre">(4)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">HD720P_RES</span> <span class="pre">(5)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">SXGA_RES</span> <span class="pre">(6)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">UXGA_RES</span> <span class="pre">(7)</span>&nbsp;&nbsp; </tt><tt class="docutils literal"><span class="pre">HD1080P_RES</span> <span class="pre">(8)</span>&nbsp;&nbsp; </tt></p>
+</p>
+<p>Rgb mode.</p>
+</li>
+<li><p class="first"><strong>synchronize</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">bool</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt><em> not </em><em>required</em><tt class="docutils literal">&nbsp;&nbsp; </tt><em> default: </em><tt class="docutils literal"><span class="pre">False</span></tt></p>
+<p>Turn sync on.</p>
+</li>
+</ul>
+</p>
+<p></p>
+<p class="topic-title first">Outputs<ul>
+<li><p class="first"><strong>depth_buffer</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">boost::shared_ptr&lt;std::vector&lt;unsigned</span> <span class="pre">short,</span> <span class="pre">std::allocator&lt;unsigned</span> <span class="pre">short&gt;</span> <span class="pre">&gt;</span> <span class="pre">const&gt;</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt></p>
+<p></p>
+</li>
+<li><p class="first"><strong>depth_height</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">int</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt></p>
+<p>Depth frame height.</p>
+</li>
+<li><p class="first"><strong>depth_width</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">int</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt></p>
+<p>Depth frame width.</p>
+</li>
+<li><p class="first"><strong>image_buffer</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">boost::shared_ptr&lt;std::vector&lt;unsigned</span> <span class="pre">char,</span> <span class="pre">std::allocator&lt;unsigned</span> <span class="pre">char&gt;</span> <span class="pre">&gt;</span> <span class="pre">const&gt;</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt></p>
+<p></p>
+</li>
+<li><p class="first"><strong>image_channels</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">int</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt></p>
+<p>Number of image channels.</p>
+</li>
+<li><p class="first"><strong>image_height</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">int</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt></p>
+<p>Image frame height.</p>
+</li>
+<li><p class="first"><strong>image_width</strong><tt class="docutils literal">&nbsp;&nbsp; </tt><em>   type: </em><tt class="docutils literal"><span class="pre">int</span> </tt><tt class="docutils literal">&nbsp;&nbsp; </tt></p>
+<p>Image frame width.</p>
+</li>
+</ul>
+</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="ecto_openni"
+             >previous</a> |</li>
+        <li><a href="index.html">ecto_openni</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012,  Willow Garage, Inc.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

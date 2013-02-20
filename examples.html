@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Examples &mdash; ecto_openni</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ecto_openni" href="index.html" />
+    <link rel="prev" title="Cells" href="cells.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cells.html" title="Cells"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ecto_openni</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#kinect-viewer">Kinect Viewer</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cells.html"
+                        title="previous chapter">Cells</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/examples.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="examples">
+<h1><a class="toc-backref" href="#id1">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#examples" id="id1">Examples</a><ul>
+<li><a class="reference internal" href="#kinect-viewer" id="id2">Kinect Viewer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="kinect-viewer">
+<h2><a class="toc-backref" href="#id2">Kinect Viewer</a><a class="headerlink" href="#kinect-viewer" title="Permalink to this headline">¶</a></h2>
+<p>Download: <a class="reference download internal" href="_downloads/kinect_standalone.py"><tt class="xref download docutils literal"><span class="pre">kinect_standalone.py</span></tt></a></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">ecto</span>
+
+<span class="kn">from</span> <span class="nn">ecto_opencv</span> <span class="kn">import</span> <span class="n">imgproc</span><span class="p">,</span> <span class="n">calib</span><span class="p">,</span> <span class="n">highgui</span>
+
+<span class="k">def</span> <span class="nf">kinect_highres</span><span class="p">(</span><span class="n">device_n</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">ecto_openni</span> <span class="kn">import</span> <span class="n">Capture</span><span class="p">,</span> <span class="n">ResolutionMode</span><span class="p">,</span> <span class="n">Device</span>
+    <span class="k">return</span> <span class="n">Capture</span><span class="p">(</span><span class="s">&#39;ni device&#39;</span><span class="p">,</span> <span class="n">rgb_resolution</span><span class="o">=</span><span class="n">ResolutionMode</span><span class="o">.</span><span class="n">SXGA_RES</span><span class="p">,</span>
+                   <span class="n">depth_resolution</span><span class="o">=</span><span class="n">ResolutionMode</span><span class="o">.</span><span class="n">VGA_RES</span><span class="p">,</span>
+                   <span class="n">rgb_fps</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">depth_fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                   <span class="n">device_number</span><span class="o">=</span><span class="n">device_n</span><span class="p">,</span>
+                   <span class="n">registration</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">synchronize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="n">device</span><span class="o">=</span><span class="n">Device</span><span class="o">.</span><span class="n">KINECT</span>
+                   <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">kinect_vga</span><span class="p">(</span><span class="n">device_n</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">ecto_openni</span> <span class="kn">import</span> <span class="n">Capture</span><span class="p">,</span> <span class="n">ResolutionMode</span><span class="p">,</span> <span class="n">Device</span>
+    <span class="k">return</span> <span class="n">Capture</span><span class="p">(</span><span class="s">&#39;ni device&#39;</span><span class="p">,</span> <span class="n">rgb_resolution</span><span class="o">=</span><span class="n">ResolutionMode</span><span class="o">.</span><span class="n">VGA_RES</span><span class="p">,</span>
+                   <span class="n">depth_resolution</span><span class="o">=</span><span class="n">ResolutionMode</span><span class="o">.</span><span class="n">VGA_RES</span><span class="p">,</span>
+                   <span class="n">rgb_fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">depth_fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                   <span class="n">device_number</span><span class="o">=</span><span class="n">device_n</span><span class="p">,</span>
+                   <span class="n">registration</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">synchronize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="n">device</span><span class="o">=</span><span class="n">Device</span><span class="o">.</span><span class="n">KINECT</span>
+                   <span class="p">)</span>
+<span class="k">def</span> <span class="nf">xtion_highres</span><span class="p">(</span><span class="n">device_n</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">ecto_openni</span> <span class="kn">import</span> <span class="n">Capture</span><span class="p">,</span> <span class="n">ResolutionMode</span><span class="p">,</span> <span class="n">Device</span>
+    <span class="k">return</span> <span class="n">Capture</span><span class="p">(</span><span class="s">&#39;ni device&#39;</span><span class="p">,</span> <span class="n">rgb_resolution</span><span class="o">=</span><span class="n">ResolutionMode</span><span class="o">.</span><span class="n">SXGA_RES</span><span class="p">,</span>
+                   <span class="n">depth_resolution</span><span class="o">=</span><span class="n">ResolutionMode</span><span class="o">.</span><span class="n">VGA_RES</span><span class="p">,</span>
+                   <span class="n">rgb_fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">depth_fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                   <span class="n">device_number</span><span class="o">=</span><span class="n">device_n</span><span class="p">,</span>
+                   <span class="n">registration</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">synchronize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">device</span><span class="o">=</span><span class="n">Device</span><span class="o">.</span><span class="n">ASUS_XTION_PRO_LIVE</span>
+                   <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">xtion_vga</span><span class="p">(</span><span class="n">device_n</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">ecto_openni</span> <span class="kn">import</span> <span class="n">Capture</span><span class="p">,</span> <span class="n">ResolutionMode</span><span class="p">,</span> <span class="n">Device</span>
+    <span class="k">return</span> <span class="n">Capture</span><span class="p">(</span><span class="s">&#39;ni device&#39;</span><span class="p">,</span> <span class="n">rgb_resolution</span><span class="o">=</span><span class="n">ResolutionMode</span><span class="o">.</span><span class="n">VGA_RES</span><span class="p">,</span>
+                   <span class="n">depth_resolution</span><span class="o">=</span><span class="n">ResolutionMode</span><span class="o">.</span><span class="n">VGA_RES</span><span class="p">,</span>
+                   <span class="n">rgb_fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">depth_fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                   <span class="n">device_number</span><span class="o">=</span><span class="n">device_n</span><span class="p">,</span>
+                   <span class="n">registration</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">synchronize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">device</span><span class="o">=</span><span class="n">Device</span><span class="o">.</span><span class="n">ASUS_XTION_PRO_LIVE</span>
+                   <span class="p">)</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c">#capture = xtion_highres(device)</span>
+<span class="n">capture</span> <span class="o">=</span> <span class="n">xtion_vga</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="c">#capture = kinect_vga(device)</span>
+<span class="c">#capture = kinect_highres(device)</span>
+
+
+<span class="n">verter</span> <span class="o">=</span> <span class="n">highgui</span><span class="o">.</span><span class="n">NiConverter</span><span class="p">(</span><span class="s">&#39;verter&#39;</span><span class="p">)</span>
+<span class="n">fps</span> <span class="o">=</span> <span class="n">highgui</span><span class="o">.</span><span class="n">FPSDrawer</span><span class="p">(</span><span class="s">&#39;fps&#39;</span><span class="p">)</span>
+
+<span class="n">plasm</span> <span class="o">=</span> <span class="n">ecto</span><span class="o">.</span><span class="n">Plasm</span><span class="p">()</span>
+<span class="n">plasm</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">capture</span><span class="p">[:]</span> <span class="o">&gt;&gt;</span> <span class="n">verter</span><span class="p">[:],</span>
+              <span class="n">verter</span><span class="p">[</span><span class="s">&#39;image&#39;</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">fps</span><span class="p">[:],</span>
+              <span class="n">fps</span><span class="p">[:]</span> <span class="o">&gt;&gt;</span> <span class="n">highgui</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s">&#39;image display&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;image&#39;</span><span class="p">)[:],</span>
+              <span class="n">verter</span><span class="p">[</span><span class="s">&#39;depth&#39;</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">highgui</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s">&#39;depth display&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;depth&#39;</span><span class="p">)[:],</span>
+              <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">sched</span> <span class="o">=</span> <span class="n">ecto</span><span class="o">.</span><span class="n">schedulers</span><span class="o">.</span><span class="n">Singlethreaded</span><span class="p">(</span><span class="n">plasm</span><span class="p">)</span>
+    <span class="n">sched</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="graphviz">
+<img src="_images/graphviz-d579861d62e8d3fd8acdd49188cd072f8e696869.png" alt="digraph G {
+graph [rankdir=TB, ranksep=1]
+edge [labelfontsize=8]
+node [shape=plaintext]
+0[label=&lt;&lt;TABLE BORDER=&quot;0&quot; CELLBORDER=&quot;1&quot; CELLSPACING=&quot;0&quot; CELLPADDING=&quot;4&quot;&gt;  &lt;TR&gt; &lt;TD ROWSPAN=&quot;9&quot; COLSPAN=&quot;7&quot; BGCOLOR=&quot;khaki&quot;&gt;ni device&lt;/TD&gt; &lt;TD PORT=&quot;p_depth_fps&quot; BGCOLOR=&quot;lightblue&quot;&gt;depth_fps&lt;/TD&gt;
+ &lt;/TR&gt; &lt;TR&gt; &lt;TD PORT=&quot;p_depth_resolution&quot; BGCOLOR=&quot;lightblue&quot;&gt;depth_resolution&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_device&quot; BGCOLOR=&quot;lightblue&quot;&gt;device&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_device_number&quot; BGCOLOR=&quot;lightblue&quot;&gt;device_number&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_device_uid&quot; BGCOLOR=&quot;lightblue&quot;&gt;device_uid&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_registration&quot; BGCOLOR=&quot;lightblue&quot;&gt;registration&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_rgb_fps&quot; BGCOLOR=&quot;lightblue&quot;&gt;rgb_fps&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_rgb_resolution&quot; BGCOLOR=&quot;lightblue&quot;&gt;rgb_resolution&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_synchronize&quot; BGCOLOR=&quot;lightblue&quot;&gt;synchronize&lt;/TD&gt; &lt;/TR&gt;
+ &lt;TR&gt;
+&lt;TD PORT=&quot;o_depth_buffer&quot; BGCOLOR=&quot;indianred1&quot;&gt;depth_buffer&lt;/TD&gt;
+&lt;TD PORT=&quot;o_depth_height&quot; BGCOLOR=&quot;indianred1&quot;&gt;depth_height&lt;/TD&gt;
+&lt;TD PORT=&quot;o_depth_width&quot; BGCOLOR=&quot;indianred1&quot;&gt;depth_width&lt;/TD&gt;
+&lt;TD PORT=&quot;o_image_buffer&quot; BGCOLOR=&quot;indianred1&quot;&gt;image_buffer&lt;/TD&gt;
+&lt;TD PORT=&quot;o_image_channels&quot; BGCOLOR=&quot;indianred1&quot;&gt;image_channels&lt;/TD&gt;
+&lt;TD PORT=&quot;o_image_height&quot; BGCOLOR=&quot;indianred1&quot;&gt;image_height&lt;/TD&gt;
+&lt;TD PORT=&quot;o_image_width&quot; BGCOLOR=&quot;indianred1&quot;&gt;image_width&lt;/TD&gt;
+&lt;/TR&gt; &lt;/TABLE&gt;&gt;];
+1[label=&lt;&lt;TABLE BORDER=&quot;0&quot; CELLBORDER=&quot;1&quot; CELLSPACING=&quot;0&quot; CELLPADDING=&quot;4&quot;&gt; &lt;TR&gt;
+&lt;TD PORT=&quot;i_depth_buffer&quot; BGCOLOR=&quot;springgreen&quot;&gt;depth_buffer&lt;/TD&gt;
+&lt;TD PORT=&quot;i_depth_height&quot; BGCOLOR=&quot;springgreen&quot;&gt;depth_height&lt;/TD&gt;
+&lt;TD PORT=&quot;i_depth_width&quot; BGCOLOR=&quot;springgreen&quot;&gt;depth_width&lt;/TD&gt;
+&lt;TD PORT=&quot;i_image_buffer&quot; BGCOLOR=&quot;springgreen&quot;&gt;image_buffer&lt;/TD&gt;
+&lt;TD PORT=&quot;i_image_channels&quot; BGCOLOR=&quot;springgreen&quot;&gt;image_channels&lt;/TD&gt;
+&lt;TD PORT=&quot;i_image_height&quot; BGCOLOR=&quot;springgreen&quot;&gt;image_height&lt;/TD&gt;
+&lt;TD PORT=&quot;i_image_width&quot; BGCOLOR=&quot;springgreen&quot;&gt;image_width&lt;/TD&gt;
+&lt;/TR&gt; &lt;TR&gt; &lt;TD ROWSPAN=&quot;1&quot; COLSPAN=&quot;7&quot; BGCOLOR=&quot;khaki&quot;&gt;verter&lt;/TD&gt; &lt;TD PORT=&quot;p_rescale&quot; BGCOLOR=&quot;lightblue&quot;&gt;rescale&lt;/TD&gt;
+ &lt;/TR&gt;  &lt;TR&gt;
+&lt;TD PORT=&quot;o_depth&quot; BGCOLOR=&quot;indianred1&quot;&gt;depth&lt;/TD&gt;
+&lt;TD PORT=&quot;o_image&quot; BGCOLOR=&quot;indianred1&quot;&gt;image&lt;/TD&gt;
+&lt;/TR&gt; &lt;/TABLE&gt;&gt;];
+2[label=&lt;&lt;TABLE BORDER=&quot;0&quot; CELLBORDER=&quot;1&quot; CELLSPACING=&quot;0&quot; CELLPADDING=&quot;4&quot;&gt; &lt;TR&gt;
+&lt;TD PORT=&quot;i_image&quot; BGCOLOR=&quot;springgreen&quot;&gt;image&lt;/TD&gt;
+&lt;/TR&gt; &lt;TR&gt; &lt;TD ROWSPAN=&quot;1&quot; COLSPAN=&quot;1&quot; BGCOLOR=&quot;khaki&quot;&gt;fps&lt;/TD&gt;  &lt;/TR&gt;  &lt;TR&gt;
+&lt;TD PORT=&quot;o_image&quot; BGCOLOR=&quot;indianred1&quot;&gt;image&lt;/TD&gt;
+&lt;/TR&gt; &lt;/TABLE&gt;&gt;];
+3[label=&lt;&lt;TABLE BORDER=&quot;0&quot; CELLBORDER=&quot;1&quot; CELLSPACING=&quot;0&quot; CELLPADDING=&quot;4&quot;&gt; &lt;TR&gt;
+&lt;TD PORT=&quot;i_image&quot; BGCOLOR=&quot;springgreen&quot;&gt;image&lt;/TD&gt;
+&lt;/TR&gt; &lt;TR&gt; &lt;TD ROWSPAN=&quot;5&quot; COLSPAN=&quot;1&quot; BGCOLOR=&quot;khaki&quot;&gt;image display&lt;/TD&gt; &lt;TD PORT=&quot;p_autoSize&quot; BGCOLOR=&quot;lightblue&quot;&gt;autoSize&lt;/TD&gt;
+ &lt;/TR&gt; &lt;TR&gt; &lt;TD PORT=&quot;p_maximize&quot; BGCOLOR=&quot;lightblue&quot;&gt;maximize&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_name&quot; BGCOLOR=&quot;lightblue&quot;&gt;name&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_triggers&quot; BGCOLOR=&quot;lightblue&quot;&gt;triggers&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_waitKey&quot; BGCOLOR=&quot;lightblue&quot;&gt;waitKey&lt;/TD&gt; &lt;/TR&gt;
+  &lt;/TABLE&gt;&gt;];
+4[label=&lt;&lt;TABLE BORDER=&quot;0&quot; CELLBORDER=&quot;1&quot; CELLSPACING=&quot;0&quot; CELLPADDING=&quot;4&quot;&gt; &lt;TR&gt;
+&lt;TD PORT=&quot;i_image&quot; BGCOLOR=&quot;springgreen&quot;&gt;image&lt;/TD&gt;
+&lt;/TR&gt; &lt;TR&gt; &lt;TD ROWSPAN=&quot;5&quot; COLSPAN=&quot;1&quot; BGCOLOR=&quot;khaki&quot;&gt;depth display&lt;/TD&gt; &lt;TD PORT=&quot;p_autoSize&quot; BGCOLOR=&quot;lightblue&quot;&gt;autoSize&lt;/TD&gt;
+ &lt;/TR&gt; &lt;TR&gt; &lt;TD PORT=&quot;p_maximize&quot; BGCOLOR=&quot;lightblue&quot;&gt;maximize&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_name&quot; BGCOLOR=&quot;lightblue&quot;&gt;name&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_triggers&quot; BGCOLOR=&quot;lightblue&quot;&gt;triggers&lt;/TD&gt; &lt;/TR&gt;
+&lt;TR&gt; &lt;TD PORT=&quot;p_waitKey&quot; BGCOLOR=&quot;lightblue&quot;&gt;waitKey&lt;/TD&gt; &lt;/TR&gt;
+  &lt;/TABLE&gt;&gt;];
+0-&gt;1 [headport=&quot;i_depth_buffer&quot; tailport=&quot;o_depth_buffer&quot;];
+0-&gt;1 [headport=&quot;i_depth_height&quot; tailport=&quot;o_depth_height&quot;];
+0-&gt;1 [headport=&quot;i_depth_width&quot; tailport=&quot;o_depth_width&quot;];
+0-&gt;1 [headport=&quot;i_image_buffer&quot; tailport=&quot;o_image_buffer&quot;];
+0-&gt;1 [headport=&quot;i_image_channels&quot; tailport=&quot;o_image_channels&quot;];
+0-&gt;1 [headport=&quot;i_image_height&quot; tailport=&quot;o_image_height&quot;];
+0-&gt;1 [headport=&quot;i_image_width&quot; tailport=&quot;o_image_width&quot;];
+1-&gt;2 [headport=&quot;i_image&quot; tailport=&quot;o_image&quot;];
+2-&gt;3 [headport=&quot;i_image&quot; tailport=&quot;o_image&quot;];
+1-&gt;4 [headport=&quot;i_image&quot; tailport=&quot;o_depth&quot;];
+}" />
+</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cells.html" title="Cells"
+             >previous</a> |</li>
+        <li><a href="index.html">ecto_openni</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012,  Willow Garage, Inc.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
