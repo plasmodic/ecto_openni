@@ -442,7 +442,8 @@ namespace ecto_openni
       o.declare(&C::depth_, "depth", "The depth stream.");
       o.declare(&C::image_, "image", "The image stream.");
       o.declare(&C::ir_, "ir", "The IR stream.");
-      o.declare(&C::K_, "K", "A 3x3 camera matrix, double type.");
+      o.declare(&C::K_image_, "K_image", "The 3x3 camera matrix, double type, image calibration matrix");
+      o.declare(&C::K_depth_, "K_depth", "The 3x3 camera matrix, double type, depth calibration matrix");
       o.declare(&C::focal_length_image_, "focal_length_image", "The focal length of the image stream.");
       o.declare(&C::focal_length_depth_, "focal_length_depth", "The focal length of the depth stream.");
       o.declare(&C::baseline_, "baseline", "The base line of the openni camera.");
@@ -483,13 +484,23 @@ namespace ecto_openni
       }
       *focal_length_depth_ = device_->getDepthFocalLength();
       *focal_length_image_ = device_->getImageFocalLength();
-      K_->create(3, 3, CV_64FC1);
-      cv::Mat_<double> K = *K_;
-      K = 0;
-      K(0, 0) = K(1, 1) = *focal_length_image_;
-      K(0, 2) = image_->size().width / 2 + 0.5;
-      K(1, 2) = image_->size().height / 2 + 0.5;
-      K(2, 2) = 1;
+
+    // Calibration matrices
+    cv::Matx33d K_image, K_depth;
+    K_image = 0;
+    K_image(0, 0) = K_image(1, 1) = *focal_length_image_;
+    K_image(0, 2) = image_->size().width / 2 + 0.5;
+    K_image(1, 2) = image_->size().height / 2 + 0.5;
+    K_image(2, 2) = 1;
+    K_depth = 0;
+    cv::Mat(K_image).copyTo(*K_image_);
+    K_depth(0, 0) = K_depth(1, 1) = *focal_length_depth_;
+    K_depth(0, 2) = depth_->size().width / 2 + 0.5;
+    K_depth(1, 2) = depth_->size().height / 2 + 0.5;
+    K_depth(2, 2) = 1;
+    cv::Mat(K_depth).copyTo(*K_depth_);
+
+    //Baseline
       *baseline_ = device_->getBaseline();
       return ecto::OK;
     }
@@ -498,7 +509,7 @@ namespace ecto_openni
     ecto::spore<ResolutionMode> depth_mode_, image_mode_;
     ecto::spore<FpsMode> depth_fps_, image_fps_;
 
-    ecto::spore<cv::Mat> depth_, ir_, image_, K_;
+    ecto::spore<cv::Mat> depth_, ir_, image_, K_image_, K_depth_;
     boost::shared_ptr<OpenNIStuff> device_;
     ecto::spore<bool> registration_, sync_, latched_;
     ecto::spore<float> focal_length_image_, focal_length_depth_, baseline_;
