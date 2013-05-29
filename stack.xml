@@ -1,6 +1,6 @@
 <stack>
   <name>ecto_openni</name>
-  <version>0.3.8</version>
+  <version>0.3.9</version>
   <description>Ecto bindings for the openni sensor.</description>
   <author email="erublee@willowgarage.com">Ethan Rublee</author>
   <maintainer email="vrabaud@willowgarage.com">Vincent Rabaud</maintainer>
