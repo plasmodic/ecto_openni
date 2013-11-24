@@ -5,16 +5,7 @@ project(ecto_openni)
 find_package(catkin REQUIRED ecto)
 find_package(ecto)
 
-if (${catkin_VERSION} VERSION_GREATER "0.5.26")
 catkin_package(DEPENDS ecto)
-else()
-catkin_stack()
-catkin_project(ecto_openni DEPENDS ecto)
-#all the ecto modules will be put here.
-if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-endif()
-endif()
 
 include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
 
@@ -36,8 +27,6 @@ add_subdirectory(cells)
 
 ecto_sphinx(${CMAKE_CURRENT_SOURCE_DIR}/doc doc)
 
-option(BUILD_TEST "Build tests" ON)
-if(BUILD_TEST)
-  enable_testing()
+if(CATKIN_ENABLE_TESTING)
   add_subdirectory(test)
 endif()

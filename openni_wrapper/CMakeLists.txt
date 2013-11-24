@@ -35,12 +35,6 @@ target_link_libraries(openni_wrapper ${Boost_LIBRARIES}
                                      OpenNI
 )
 
-if (ROS_GROOVY_OR_ABOVE_FOUND)
 install(TARGETS openni_wrapper
         DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
-else()
-install(TARGETS openni_wrapper
-        DESTINATION lib
-)
-endif()
