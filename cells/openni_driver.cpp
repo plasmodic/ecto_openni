@@ -486,7 +486,7 @@ namespace ecto_openni
       *focal_length_image_ = device_->getImageFocalLength();
 
     // Calibration matrices
-    cv::Matx33d K_image, K_depth;
+    cv::Matx33f K_image, K_depth;
     K_image = 0;
     K_image(0, 0) = K_image(1, 1) = *focal_length_image_;
     K_image(0, 2) = image_->size().width / 2 + 0.5;
