@@ -2,8 +2,8 @@
 Changelog for package ecto_openni
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2014-04-04)
+------------------
 * remove stack.xml now that Fuerte is dropped
 * use floats for internals
 * remove Fuerte support
