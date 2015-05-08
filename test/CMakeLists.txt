@@ -1,8 +1,1 @@
-macro(pytest pyfile)
-  string(REPLACE ";" " " args "${ARGN}")
-  add_test(openni_${pyfile}
-    ${CATKIN_ENV} ${CMAKE_CURRENT_SOURCE_DIR}/${pyfile}.py ${args}
-    )
-endmacro()
-
-pytest(test_import)
+catkin_add_nosetests(test_import.py)
