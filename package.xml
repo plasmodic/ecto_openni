@@ -19,7 +19,7 @@
   <run_depend>cv_bridge</run_depend>
   <run_depend>libopenni-dev</run_depend>
 
-  <test_depend>unittest</test_depend>
+  <test_depend>rosunit</test_depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 </package>
